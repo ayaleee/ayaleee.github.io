@@ -106,28 +106,39 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .intro img{width:72px;height:72px;border-radius:50%;object-fit:cover;display:block}
 .intro p{margin:0;font-size:13.5px;line-height:1.8;min-width:0}
 .intro b{font-weight:500;letter-spacing:.06em}
+.langs{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));display:flex;gap:2px;z-index:2}
+.langs button{font-family:var(--font-wide);font-stretch:125%;font-size:10.5px;letter-spacing:.12em;color:var(--on-photo);background:none;border:0;border-bottom:1px solid transparent;padding:6px 7px;cursor:pointer;opacity:.75}
+.langs button[aria-pressed="true"]{opacity:1;border-bottom-color:var(--on-photo)}
+.langs button:focus-visible{outline:1px solid var(--on-photo);outline-offset:2px}
+.how .note2{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
+.how .note2:empty{display:none}
 footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid var(--line);padding-top:14px}
 </style>
 </head>
 <body>
 
-<section class="hero" aria-label="バレルの上で体を伸ばす Ayalee">
+<section class="hero" id="hero" aria-label="バレルの上で体を伸ばす Ayalee">
+  <div class="langs" role="group" aria-label="Language">
+    <button type="button" data-lang="ja" aria-pressed="true">JP</button>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
   <span class="k">Ayalee</span>
   <span class="sub2">Pilates Lesson</span>
-  <h1>レッスン空き枠</h1>
-  <a class="cta" href="#days">空き時間を見る</a>
+  <h1 data-i="h1">レッスン空き枠</h1>
+  <a class="cta" href="#days" data-i="cta">空き時間を見る</a>
 </section>
 <div class="wrap">
   <div class="titlebox">
-    <p>STUDIO TOU 代官山・中目黒／はじめての方は体験 60分 ¥5,000・English OK</p>
+    <p data-i="lead">STUDIO TOU 代官山・中目黒／はじめての方は体験 60分 ¥5,000・English OK</p>
     <span class="asof" id="asof"></span>
   </div>
-  <div class="switch" id="days" role="group" aria-label="店舗">
+  <div class="switch" id="days" role="group" aria-label="店舗" data-ia="storeLabel">
     <button id="btn-td" type="button" aria-pressed="true">代官山</button>
     <button id="btn-tn" type="button" aria-pressed="false">中目黒</button>
   </div>
 
-  <div class="strip" id="strip" role="group" aria-label="日付"></div>
+  <div class="strip" id="strip" role="group" aria-label="日付" data-ia="dateLabel"></div>
 
   <section class="panel" aria-live="polite">
     <div class="ptitle"><b id="ptitle"></b><span class="summary" id="summary"></span></div>
@@ -137,30 +148,31 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
 
   <section class="how">
     <span class="sec-en">How to book</span>
-    <h2>ご予約のしかた</h2>
-    <div class="price"><span>体験レッスン 60分</span><b>¥5,000</b></div>
+    <h2 data-i="howH">ご予約のしかた</h2>
+    <div class="price"><span data-i="trial">体験レッスン 60分</span><b>¥5,000</b></div>
     <ol>
-      <li>LINE で「店舗・希望の日にち・開始時間」を送ってください。</li>
-      <li>Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。</li>
-      <li>「チケット買いました」と LINE をいただいたら、ご予約確定です。</li>
+      <li data-i="s1">LINE で「店舗・希望の日にち・開始時間」を送ってください。</li>
+      <li data-i="s2" data-html>Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。</li>
+      <li data-i="s3">「チケット買いました」と LINE をいただいたら、ご予約確定です。</li>
     </ol>
+    <p class="note2" data-i="note2"></p>
     <div class="links">
-      <a class="primary" href="https://line.me/R/ti/p/@277rgyhl" target="_blank" rel="noopener">LINE で予約する</a>
-      <a href="https://tou.hacomono.jp/" target="_blank" rel="noopener">チケットを買う</a>
+      <a class="primary" href="https://line.me/R/ti/p/@277rgyhl" target="_blank" rel="noopener" data-i="bookLine">LINE で予約する</a>
+      <a href="https://tou.hacomono.jp/" target="_blank" rel="noopener" data-i="buy">チケットを買う</a>
     </div>
-    <div class="lineid">LINE ID <code id="lid">@277rgyhl</code><button class="copy" id="copy" type="button">コピー</button></div>
+    <div class="lineid">LINE ID <code id="lid">@277rgyhl</code><button class="copy" id="copy" type="button" data-i="copy">コピー</button></div>
     <div class="maps">
-      <a href="https://maps.app.goo.gl/V2dvPmZdfdP8jn92A" target="_blank" rel="noopener">代官山の地図</a>
-      <a href="https://maps.app.goo.gl/sWyjSUvocpDGJKE88" target="_blank" rel="noopener">中目黒の地図</a>
+      <a href="https://maps.app.goo.gl/V2dvPmZdfdP8jn92A" target="_blank" rel="noopener" data-i="mapTd">代官山の地図</a>
+      <a href="https://maps.app.goo.gl/sWyjSUvocpDGJKE88" target="_blank" rel="noopener" data-i="mapTn">中目黒の地図</a>
     </div>
   </section>
 
   <div class="intro">
     <img src="public-img/face.jpg" alt="Ayalee" width="72" height="72">
-    <p><b>Ayalee</b><br>舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。</p>
+    <p><b>Ayalee</b><br><span data-i="intro">舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。</span></p>
   </div>
   <div class="motto"><span class="m1">Movement for <i>loving your body</i></span></div>
-  <footer>毎朝更新しています。表示のあとに埋まることもあるので、LINE でお返事した時点の空きで確定します。</footer>
+  <footer data-i="foot">毎朝更新しています。表示のあとに埋まることもあるので、LINE でお返事した時点の空きで確定します。</footer>
 </div>
 
 <script>
@@ -217,6 +229,69 @@ const blocked = list => list.map(r => r.split("-").map(toMin)).map(([a,b]) => [a
 const fits = (blk, s) => !blk.some(([a,b]) => a < s+LESSON && b > s);
 const STARTS = []; for (let s = OPEN; s + LESSON <= CLOSE; s += STEP) STARTS.push(s);
 
+const T = {
+  ja: {
+    title:"Ayalee レッスン空き枠", heroLabel:"バレルの上で体を伸ばす Ayalee",
+    h1:"レッスン空き枠", cta:"空き時間を見る",
+    lead:"STUDIO TOU 代官山・中目黒／はじめての方は体験 60分 ¥5,000・English OK",
+    storeLabel:"店舗", dateLabel:"日付", td:"代官山", tn:"中目黒",
+    wd:["日","月","火","水","木","金","土"], today:"今日", open:"空きあり", full:"満",
+    day:(m,d,w,st)=>`${m}/${d}（${w}）${st}`, startsAt:"開始できる時間",
+    one:"スタート", range:"の間にスタート", none:"この日は空きがありません。ほかの日をお選びください。",
+    prep:"ただいま空き情報を準備中です。LINE でお問い合わせください。",
+    asof:(m,d,t)=>`${m}/${d} ${t} 時点の空き（30分ごと）`,
+    howH:"ご予約のしかた", trial:"体験レッスン 60分",
+    s1:"LINE で「店舗・希望の日にち・開始時間」を送ってください。",
+    s2:"Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。",
+    s3:"「チケット買いました」と LINE をいただいたら、ご予約確定です。", note2:"",
+    bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
+    mapTd:"代官山の地図", mapTn:"中目黒の地図",
+    intro:"舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。",
+    foot:"毎朝更新しています。表示のあとに埋まることもあるので、LINE でお返事した時点の空きで確定します。"
+  },
+  en: {
+    title:"Ayalee Pilates — Lesson availability", heroLabel:"Ayalee stretching on a Pilates barrel",
+    h1:"Lesson availability", cta:"See open times",
+    lead:"STUDIO TOU Daikanyama & Nakameguro / First-time trial lesson: 60 min, ¥5,000 / English OK",
+    storeLabel:"Studio", dateLabel:"Date", td:"Daikanyama", tn:"Nakameguro",
+    wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], today:"Today", open:"Open", full:"Full",
+    day:(m,d,w,st)=>`${w} ${m}/${d} · ${st}`, startsAt:"Start times",
+    one:"start", range:"start any time", none:"No openings on this day. Please choose another day.",
+    prep:"Availability is being updated. Please ask on LINE.",
+    asof:(m,d,t)=>`As of ${m}/${d} ${t} (30-min steps)`,
+    howH:"Booking in 3 steps", trial:"Trial lesson, 60 min",
+    s1:"Send me your preferred studio, date and start time on LINE.",
+    s2:"After I reply, buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b>",
+    s3:"Message me “I bought the ticket” on LINE, and your booking is confirmed.",
+    note2:"The hacomono ticket site is in Japanese. If you get stuck, just ask me on LINE.",
+    bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
+    mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
+    intro:"I’m a stage actor and a BASI Pilates instructor. First-timers and stiff bodies are very welcome. Let’s make it 60 minutes that leave you liking your body a little more.",
+    foot:"Updated every morning. Times can fill up after the update, so your booking is based on availability when I reply on LINE."
+  },
+  zh: {
+    title:"Ayalee 普拉提 课程空位", heroLabel:"在普拉提桶上伸展的 Ayalee",
+    h1:"课程空位", cta:"查看可约时间",
+    lead:"STUDIO TOU 代官山・中目黑／首次体验课 60分钟 ¥5,000・可用日语、英语沟通",
+    storeLabel:"店铺", dateLabel:"日期", td:"代官山", tn:"中目黑",
+    wd:["日","一","二","三","四","五","六"], today:"今天", open:"有空位", full:"已满",
+    day:(m,d,w,st)=>`${m}/${d}（周${w}）${st}`, startsAt:"可开始的时间",
+    one:"开始", range:"之间开始", none:"这一天已约满，请选择其他日期。",
+    prep:"空位信息更新中，请通过 LINE 咨询。",
+    asof:(m,d,t)=>`${m}/${d} ${t} 的空位（每30分钟）`,
+    howH:"预约方式", trial:"体验课 60分钟",
+    s1:"请通过 LINE 发送「店铺・希望日期・开始时间」。",
+    s2:"收到 Ayalee 的回复后，请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>，并购买课程券。",
+    s3:"购买后在 LINE 告诉我「已购买」，预约即确定。",
+    note2:"hacomono 购票页面是日文的。如有不明白的地方，欢迎在 LINE 上问我。",
+    bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
+    mapTd:"代官山店地图", mapTn:"中目黑店地图",
+    intro:"我是舞台演员，也是 BASI 普拉提教练。第一次上课、身体比较僵硬都没关系。让这60分钟结束时，你会更喜欢自己的身体一点。",
+    foot:"每天早上更新。更新后也可能被约满，以我在 LINE 回复时的空位为准。"
+  }
+};
+let lang = "ja";
+const L = () => T[lang];
 const WD = ["日","月","火","水","木","金","土"];
 const pad2 = n => String(n).padStart(2,"0");
 const now = new Date();
@@ -256,31 +331,30 @@ function render(){
     const {m,d,w,wcls} = keyInfo(k);
     const n = startsFor(store, k).length;
     return `<button type="button" class="dbtn ${k===tKey?"today":""}" data-k="${k}" aria-pressed="${k===selected}">
-      <span class="w ${wcls}">${k===tKey?"今日":WD[w]}</span><span class="d">${m}/${d}</span><span class="lv ${n?"ok":""}">${n?"空きあり":"満"}</span></button>`;
+      <span class="w ${wcls}">${k===tKey?L().today:L().wd[w]}</span><span class="d">${m}/${d}</span><span class="lv ${n?"ok":""}">${n?L().open:L().full}</span></button>`;
   }).join("");
   document.querySelectorAll(".dbtn").forEach(b => b.addEventListener("click", () => { selected = b.dataset.k; render(); }));
   const selBtn = document.querySelector('.dbtn[aria-pressed="true"]');
   if (selBtn) selBtn.scrollIntoView({block:"nearest", inline:"nearest"});
 
-  if (!selected){ document.getElementById("ptitle").textContent = ""; document.getElementById("grid").innerHTML = `<div class="empty">ただいま空き情報を準備中です。LINE でお問い合わせください。</div>`; return; }
+  if (!selected){ document.getElementById("ptitle").textContent = ""; document.getElementById("grid").innerHTML = `<div class="empty">${L().prep}</div>`; return; }
   const {m,d,w} = keyInfo(selected);
   const bs = bands(startsFor(store, selected));
-  document.getElementById("ptitle").textContent = `${m}/${d}（${WD[w]}）${store==="td"?"代官山":"中目黒"}`;
-  document.getElementById("summary").textContent = bs.length ? "開始できる時間" : "";
+  document.getElementById("ptitle").textContent = L().day(m, d, L().wd[w], L()[store]);
+  document.getElementById("summary").textContent = bs.length ? L().startsAt : "";
   document.getElementById("grid").innerHTML = bs.length ? bs.map(x =>
     x.a === x.b
-      ? `<div class="seg"><span class="t">${fmt(x.a)}</span><span class="s">スタート</span></div>`
-      : `<div class="seg"><span class="t">${fmt(x.a)}〜${fmt(x.b)}</span><span class="s">の間にスタート</span></div>`
-  ).join("") : `<div class="empty">この日は空きがありません。ほかの日をお選びください。</div>`;
+      ? `<div class="seg"><span class="t">${fmt(x.a)}</span><span class="s">${L().one}</span></div>`
+      : `<div class="seg"><span class="t">${fmt(x.a)}${lang==="en"?"–":"〜"}${fmt(x.b)}</span><span class="s">${L().range}</span></div>`
+  ).join("") : `<div class="empty">${L().none}</div>`;
 }
 
 const [dPart, tPart] = DATA.asof.split(" ");
 const [, am, ad] = dPart.split("-").map(Number);
-document.getElementById("asof").textContent = `${am}/${ad} ${tPart} 時点の空き（30分ごと）`;
 
 document.getElementById("copy").addEventListener("click", e => {
   const btn = e.currentTarget;
-  navigator.clipboard.writeText("@277rgyhl").then(() => { btn.textContent = "コピーしました"; })
+  navigator.clipboard.writeText("@277rgyhl").then(() => { btn.textContent = L().copied; })
     .catch(() => { const r = document.createRange(); r.selectNodeContents(document.getElementById("lid")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
 });
 
@@ -294,7 +368,31 @@ function setStore(s){
 }
 document.getElementById("btn-td").addEventListener("click", () => setStore("td"));
 document.getElementById("btn-tn").addEventListener("click", () => setStore("tn"));
+
+// 言語：?lang=en / zh / ja → 前に選んだもの → 端末の言語
+function setLang(l){
+  lang = T[l] ? l : "ja";
+  const t = L();
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
+  document.title = t.title;
+  document.getElementById("hero").setAttribute("aria-label", t.heroLabel);
+  document.querySelectorAll("[data-i]").forEach(el => { const v = t[el.dataset.i]; if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v; });
+  document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", t[el.dataset.ia]));
+  document.getElementById("btn-td").textContent = t.td;
+  document.getElementById("btn-tn").textContent = t.tn;
+  document.getElementById("asof").textContent = t.asof(am, ad, tPart);
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  try { localStorage.setItem("lang", lang); } catch(e){}
+  render();
+}
+document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+let first = null;
+try { first = new URLSearchParams(location.search).get("lang"); } catch(e){}
+if (!T[first]) { try { first = localStorage.getItem("lang"); } catch(e){} }
+if (!T[first]) { const n = (navigator.language || "ja").toLowerCase(); first = n.startsWith("zh") ? "zh" : n.startsWith("ja") ? "ja" : "en"; }
+lang = first;
 setStore(store);
+setLang(first);
 </script>
 </body>
 </html>
