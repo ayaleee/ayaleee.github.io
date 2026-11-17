@@ -159,6 +159,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <div class="links">
       <a class="primary" href="https://line.me/R/ti/p/@277rgyhl" target="_blank" rel="noopener" data-i="bookLine">LINE で予約する</a>
       <a href="https://tou.hacomono.jp/" target="_blank" rel="noopener" data-i="buy">チケットを買う</a>
+      <a class="ig" href="https://ig.me/m/ayaka_leee" target="_blank" rel="noopener" data-i="ig" hidden></a>
     </div>
     <div class="lineid">LINE ID <code id="lid">@277rgyhl</code><button class="copy" id="copy" type="button" data-i="copy">コピー</button></div>
     <div class="maps">
@@ -243,7 +244,7 @@ const T = {
     howH:"ご予約のしかた", trial:"体験レッスン 60分",
     s1:"LINE で「店舗・希望の日にち・開始時間」を送ってください。",
     s2:"Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。",
-    s3:"「チケット買いました」と LINE をいただいたら、ご予約確定です。", note2:"",
+    s3:"「チケット買いました」と LINE をいただいたら、ご予約確定です。", note2:"", ig:"",
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
     intro:"舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。",
@@ -260,10 +261,10 @@ const T = {
     prep:"Availability is being updated. Please ask on LINE.",
     asof:(m,d,t)=>`As of ${m}/${d} ${t} (30-min steps)`,
     howH:"Booking in 3 steps", trial:"Trial lesson, 60 min",
-    s1:"Send me your preferred studio, date and start time on LINE.",
+    s1:"Send me your preferred studio, date and start time on LINE or Instagram DM.",
     s2:"After I reply, buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b>",
-    s3:"Message me “I bought the ticket” on LINE, and your booking is confirmed.",
-    note2:"The hacomono ticket site is in Japanese. If you get stuck, just ask me on LINE.",
+    s3:"Message me “I bought the ticket”, and your booking is confirmed.",
+    note2:"No LINE? Send me a DM on Instagram (@ayaka_leee) instead. The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
     intro:"I’m a stage actor and a BASI Pilates instructor. First-timers and stiff bodies are very welcome. Let’s make it 60 minutes that leave you liking your body a little more.",
@@ -283,7 +284,7 @@ const T = {
     s1:"请通过 LINE 发送「店铺・希望日期・开始时间」。",
     s2:"收到 Ayalee 的回复后，请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>，并购买课程券。",
     s3:"购买后在 LINE 告诉我「已购买」，预约即确定。",
-    note2:"hacomono 购票页面是日文的。如有不明白的地方，欢迎在 LINE 上问我。",
+    note2:"hacomono 购票页面是日文的。如有不明白的地方，欢迎在 LINE 上问我。", ig:"",
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
     intro:"我是舞台演员，也是 BASI 普拉提教练。第一次上课、身体比较僵硬都没关系。让这60分钟结束时，你会更喜欢自己的身体一点。",
@@ -377,6 +378,7 @@ function setLang(l){
   document.title = t.title;
   document.getElementById("hero").setAttribute("aria-label", t.heroLabel);
   document.querySelectorAll("[data-i]").forEach(el => { const v = t[el.dataset.i]; if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v; });
+  document.querySelectorAll("[data-i=ig]").forEach(el => { el.hidden = !t.ig; });
   document.querySelectorAll("[data-ia]").forEach(el => el.setAttribute("aria-label", t[el.dataset.ia]));
   document.getElementById("btn-td").textContent = t.td;
   document.getElementById("btn-tn").textContent = t.tn;
