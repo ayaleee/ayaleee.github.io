@@ -225,7 +225,8 @@ const DATA = {
 // 終日埋まりにする日（DATA の外。毎朝の自動更新では消えない）。2026-11-28＝押さえ、11/20 の結果で解除か確定
 const CLOSED_DAYS = ["2026-11-28"];
 const OPEN = 8*60, CLOSE = 21*60, BUFFER = 30, LESSON = 60, STEP = 30;
-const TN_REFORMERS = ["R1","R2","R3","R4","R5","R6","GP1","GP2","GP3","GP4","GP5","GP6"];
+// R1〜R6 は青葉台用でまだ使えない（2026-11-18）。中目黒は GP1〜GP6 だけで数える
+const TN_REFORMERS = ["GP1","GP2","GP3","GP4","GP5","GP6"];
 const toMin = s => { const [h,m] = s.split(":").map(Number); return h*60+m; };
 const fmt = m => `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}`;
 const blocked = list => list.map(r => r.split("-").map(toMin)).map(([a,b]) => [a-BUFFER, b+BUFFER]);
