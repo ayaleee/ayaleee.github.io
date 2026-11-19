@@ -500,7 +500,7 @@ function updateReq(){
   const s = +document.getElementById("rq-t").value, menu = document.getElementById("rq-m").value;
   const k = document.getElementById("rq-k").value;
   const semi = menu === "semi", have = !first && !semi && k === "have";
-  document.getElementById("rq-n2w").hidden = !semi;
+  document.getElementById("rq-n2w").hidden = true; // 2人目の名前は今は聞かない（2026-11-19）
   document.getElementById("rq-kw").hidden = first || semi;
   document.getElementById("rq-buy").hidden = have;
   document.getElementById("rq-pw").hidden = have;
@@ -516,7 +516,7 @@ function updateReq(){
   const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
   const name = first ? document.getElementById("rq-n").value.trim() : "";
   try { if (first) localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
-  reqMsg = t.msg({ name, name2: semi ? document.getElementById("rq-n2").value.trim() : "", who: first ? t.first : t.again, st, dt,
+  reqMsg = t.msg({ name, name2: "", who: first ? t.first : t.again, st, dt,
     menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.kHave : ticket.replace(/ ¥[\d,]+$/,""),
     paid: have ? "" : document.getElementById("rq-p").checked ? t.paidY : t.paidN });
   document.getElementById("rq-msg").textContent = reqMsg;
