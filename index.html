@@ -135,6 +135,8 @@ button.seg[aria-expanded="true"] .go{transform:rotate(90deg)}
 .req .who button{flex:1;font:inherit;font-size:14px;padding:9px 6px;border:0;background:var(--bg);color:var(--muted);cursor:pointer}
 .req .who button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .req [hidden]{display:none!important}
+.req .alt{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.req .alt select{min-width:0}
 .req .stp{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line-strong);padding-top:12px}
 .req .stp b{font-size:13px;font-weight:500;letter-spacing:.06em}
 .req .path{margin:0;font-size:13px;line-height:1.7}
@@ -278,6 +280,7 @@ const T = {
     s2:"hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。先に買っておくと、すぐに確定できます。",
     s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"もし埋まっていたら、別の時間をご案内します。チケットはほかの日にもそのまま使えます。", ig:"",
     semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）",
+    alt:"第2希望（あれば）", altNone:"なし", altKey:"第2希望",
     reqH:"この時間で申し込む", reqT:"開始時間", reqM:"メニュー", reqP:"チケットはもう買いました",
     mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600",
     tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
@@ -293,7 +296,7 @@ const T = {
     haveNote:"新しく買う必要はありません。そのまま ② へ進んでください。", trialOnce:"体験はお一人1回だけです。2回目からは回数券がお得です。",
     firstGuide:"まず hacomono の会員登録をしてから、チケットを購入してください。", regBtn:"会員登録する",
     againP:"2回目からは回数券がお得です（10回券なら1回 ¥6,710）",
-    msg:o=>`【予約希望】${o.name||o.name2?`\nお名前：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\nご利用：${o.who}\n店舗：${o.st}\n日時：${o.dt}\nメニュー：${o.menu}\nチケット：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    msg:o=>`【予約希望】${o.name||o.name2?`\nお名前：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\nご利用：${o.who}\n店舗：${o.st}\n日時：${o.dt}${o.alt?`\n第2希望：${o.alt}`:""}\nメニュー：${o.menu}\nチケット：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
     paidY:"購入済み", paidN:"これから購入", paidH:"持っている回数券",
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
@@ -316,6 +319,7 @@ const T = {
     s3:"When you get “Your booking is confirmed” from me on LINE, you’re all set.",
     note2:"If the time has just filled up, I’ll suggest another time — your ticket can be used on any day. No LINE? Copy the message and send it as an Instagram DM (@ayaka_leee). The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
     semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person)",
+    alt:"Second choice (optional)", altNone:"None", altKey:"2nd choice",
     reqH:"Request this time", reqT:"Start time", reqM:"Menu", reqP:"I’ve already bought the ticket",
     mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person",
     tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
@@ -331,7 +335,7 @@ const T = {
     haveNote:"No need to buy anything. Go straight to ②.", trialOnce:"The trial is once per person. From your 2nd visit, a pass is the best value.",
     firstGuide:"First sign up on hacomono, then buy the ticket.", regBtn:"Sign up",
     againP:"From your 2nd visit, passes are the best value (10-lesson pass: ¥6,710 each)",
-    msg:o=>`[Booking request]${o.name||o.name2?`\nName: ${[o.name,o.name2].filter(Boolean).join(", ")}`:""}\nVisit: ${o.who}\nStudio: ${o.st}\nDate: ${o.dt}\nMenu: ${o.menu}\nTicket: ${o.ticket}${o.paid?` (${o.paid})`:""}`,
+    msg:o=>`[Booking request]${o.name||o.name2?`\nName: ${[o.name,o.name2].filter(Boolean).join(", ")}`:""}\nVisit: ${o.who}\nStudio: ${o.st}\nDate: ${o.dt}${o.alt?`\n2nd choice: ${o.alt}`:""}\nMenu: ${o.menu}\nTicket: ${o.ticket}${o.paid?` (${o.paid})`:""}`,
     paidY:"bought", paidN:"buying now", paidH:"pass I have",
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
@@ -354,6 +358,7 @@ const T = {
     s3:"收到 Ayalee 发来的「预约确定」LINE 就完成了。",
     note2:"如果刚好被约满，我会为您推荐其他时间，课程券可以用于其他日期。没有 LINE 的话，可以复制内容在 Instagram（@ayaka_leee）私信我。hacomono 购票页面是日文的，如有不明白的地方，欢迎随时问我。", ig:"Instagram 私信",
     semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）",
+    alt:"第二希望（可选）", altNone:"无", altKey:"第二希望／第2希望",
     reqH:"申请这个时间", reqT:"开始时间", reqM:"课程", reqP:"我已经购买了课程券",
     mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600",
     tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
@@ -369,7 +374,7 @@ const T = {
     haveNote:"不需要再购买，直接进行 ②。", trialOnce:"体验课每人只能上 1 次。从第二次开始买次数券更划算。",
     firstGuide:"请先在 hacomono 注册会员，然后购买课程券。", regBtn:"注册会员",
     againP:"从第二次开始，次数券更划算（10次券每次 ¥6,710）",
-    msg:o=>`【预约申请／予約希望】${o.name||o.name2?`\n姓名：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\n次数／ご利用：${o.who}\n店铺：${o.st}\n日期：${o.dt}\n课程：${o.menu}\n课程券：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    msg:o=>`【预约申请／予約希望】${o.name||o.name2?`\n姓名：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\n次数／ご利用：${o.who}\n店铺：${o.st}\n日期：${o.dt}${o.alt?`\n第二希望／第2希望：${o.alt}`:""}\n课程：${o.menu}\n课程券：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
     paidY:"已购买（購入済み）", paidN:"马上购买（これから購入）", paidH:"已有次数券（持っている回数券）",
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
@@ -466,6 +471,7 @@ function reqHTML(x){
     <label>${t.reqT}<select id="rq-t">${opts.join("")}</select></label>
     <label>${t.reqM}<select id="rq-m"></select></label>
     <label id="rq-n2w" hidden>${t.name2L}<input type="text" id="rq-n2" placeholder="${t.nameP}"></label>
+    <label>${t.alt}<div class="alt"><select id="rq-ad"></select><select id="rq-at"></select></div></label>
     <label id="rq-kw" hidden>${t.tkL}<select id="rq-k"><option value="10">${t.k10}</option><option value="5">${t.k5}</option><option value="1">${t.k1}</option><option value="have">${t.kHave}</option></select></label>
     <div class="stp">
       <b>${t.st1}</b>
@@ -493,7 +499,21 @@ function fillMenu(){
   sel.innerHTML = `<option value="priv">${first ? t.mTrial : t.mPriv}</option>` + (x.semi ? `<option value="semi">${t.mSemi}</option>` : "");
   if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
 }
+const dtLabel = (key, s) => { const t = L(), {m,d,w} = keyInfo(key); return lang === "en" ? `${t.wd[w]} ${m}/${d}, ${fmt(s)}–${fmt(s+LESSON)}` : `${m}/${d}（${WD[w]}）${fmt(s)}〜${fmt(s+LESSON)}`; };
+function fillAlt(){
+  const t = L(), ad = document.getElementById("rq-ad"), at = document.getElementById("rq-at"), prevD = ad.value, prevT = at.value;
+  const first = +document.getElementById("rq-t").value;
+  const ok = (k, s) => !(k === selected && s === first);
+  const keys = Object.keys(DATA[store]).sort().filter(k => k >= tKey && startsFor(store, k).some(s => ok(k, s)));
+  ad.innerHTML = `<option value="">${t.altNone}</option>` + keys.map(k => { const {m,d,w} = keyInfo(k); return `<option value="${k}">${m}/${d}（${t.wd[w]}）</option>`; }).join("");
+  if (keys.includes(prevD)) ad.value = prevD;
+  const starts = ad.value ? startsFor(store, ad.value).filter(s => ok(ad.value, s)) : [];
+  at.innerHTML = starts.map(s => `<option value="${s}">${fmt(s)}${lang==="en"?"–":"〜"}</option>`).join("");
+  at.disabled = !ad.value;
+  if (starts.map(String).includes(prevT)) at.value = prevT;
+}
 function updateReq(){
+  fillAlt();
   const t = L(), box = document.getElementById("req");
   box.querySelectorAll(".who button").forEach(b => b.setAttribute("aria-pressed", b.dataset.w === reqWho));
   const first = reqWho === "first";
@@ -518,6 +538,7 @@ function updateReq(){
   try { if (first) localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
   reqMsg = t.msg({ name, name2: "", who: first ? t.first : t.again, st, dt,
     menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.kHave : ticket.replace(/ ¥[\d,]+$/,""),
+    alt: document.getElementById("rq-ad").value && document.getElementById("rq-at").value ? dtLabel(document.getElementById("rq-ad").value, +document.getElementById("rq-at").value) : "",
     paid: have ? "" : document.getElementById("rq-p").checked ? t.paidY : t.paidN });
   document.getElementById("rq-msg").textContent = reqMsg;
   document.getElementById("rq-line").href = "https://line.me/R/oaMessage/@277rgyhl/?" + encodeURIComponent(reqMsg);
