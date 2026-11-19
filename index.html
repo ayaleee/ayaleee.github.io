@@ -130,6 +130,11 @@ button.seg[aria-expanded="true"] .go{transform:rotate(90deg)}
 .req .rbtns a{display:inline-flex;padding:11px 16px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-size:14px;letter-spacing:.06em}
 .req pre{margin:0;white-space:pre-wrap;font:inherit;font-size:12.5px;line-height:1.6;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:10px}
 .price2{font-size:12.5px;color:var(--muted)}
+.req input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line-strong);border-radius:0;padding:9px 10px}
+.req .who{display:flex;border:1px solid var(--line-strong)}
+.req .who button{flex:1;font:inherit;font-size:14px;padding:9px 6px;border:0;background:var(--bg);color:var(--muted);cursor:pointer}
+.req .who button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.req [hidden]{display:none!important}
 .req .stp{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line-strong);padding-top:12px}
 .req .stp b{font-size:13px;font-weight:500;letter-spacing:.06em}
 .req .path{margin:0;font-size:13px;line-height:1.7}
@@ -175,6 +180,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <span class="sec-en">How to book</span>
     <h2 data-i="howH">ご予約のしかた</h2>
     <div class="price"><span data-i="trial">体験レッスン 60分</span><b>¥5,000</b></div>
+    <div class="price2" data-i="againP">2回目からは回数券がお得です（10回券なら1回 ¥6,710）</div>
     <div class="price2" data-i="semiP">中目黒は2名のセミプライベートもできます（1人 ¥6,600）</div>
     <ol>
       <li data-i="s1">LINE で「店舗・希望の日にち・開始時間」を送ってください。</li>
@@ -280,7 +286,15 @@ const T = {
     pathPre:"ログインして、", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"「指名料」が付いていないものを選んでください。", newMem:"はじめての方は先に", reg:"会員登録", guide:"買い方の画像", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
-    msg:(st,dt,menu,paid)=>`【予約希望】\n店舗：${st}\n日時：${dt}\nメニュー：${menu}\nチケット：${paid?"購入済み":"これから購入"}\nお名前：`,
+    who:"ご利用", first:"はじめて", again:"2回目以降",
+    nameL:"お名前（フルネーム）", nameP:"例：山田 花子", name2L:"もう1人のお名前", tkL:"チケット",
+    mPriv:"プライベートレッスン", k10:"10回券 ¥67,100（1回 ¥6,710）おすすめ", k5:"5回券 ¥39,600（1回 ¥7,920）", k1:"1回券 ¥9,900", kHave:"持っている回数券を使う",
+    tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
+    haveNote:"新しく買う必要はありません。そのまま ② へ進んでください。", trialOnce:"体験はお一人1回だけです。2回目からは回数券がお得です。",
+    firstGuide:"まず hacomono の会員登録をしてから、チケットを購入してください。", regBtn:"会員登録する",
+    againP:"2回目からは回数券がお得です（10回券なら1回 ¥6,710）",
+    msg:o=>`【予約希望】\nお名前：${o.name}${o.name2?`、${o.name2}`:""}\nご利用：${o.who}\n店舗：${o.st}\n日時：${o.dt}\nメニュー：${o.menu}\nチケット：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    paidY:"購入済み", paidN:"これから購入", paidH:"持っている回数券",
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
     intro:"舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。",
@@ -310,7 +324,15 @@ const T = {
     pathPre:"Log in, then tap: ", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"Choose the one without “指名料” (nomination fee).", newMem:"First time? Please", reg:"sign up", guide:"Picture guide", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
-    msg:(st,dt,menu,paid)=>`[Booking request]\nStudio: ${st}\nDate: ${dt}\nMenu: ${menu}\nTicket: ${paid?"bought":"not yet"}\nName: `,
+    who:"Visit", first:"First time", again:"Been before",
+    nameL:"Your full name", nameP:"e.g. Hanako Yamada", name2L:"Second person’s name", tkL:"Ticket",
+    mPriv:"Private lesson", k10:"10-lesson pass ¥67,100 (¥6,710 each) recommended", k5:"5-lesson pass ¥39,600 (¥7,920 each)", k1:"Single ¥9,900", kHave:"Use a pass I already have",
+    tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
+    haveNote:"No need to buy anything. Go straight to ②.", trialOnce:"The trial is once per person. From your 2nd visit, a pass is the best value.",
+    firstGuide:"First sign up on hacomono, then buy the ticket.", regBtn:"Sign up",
+    againP:"From your 2nd visit, passes are the best value (10-lesson pass: ¥6,710 each)",
+    msg:o=>`[Booking request]\nName: ${o.name}${o.name2?`, ${o.name2}`:""}\nVisit: ${o.who}\nStudio: ${o.st}\nDate: ${o.dt}\nMenu: ${o.menu}\nTicket: ${o.ticket}${o.paid?` (${o.paid})`:""}`,
+    paidY:"bought", paidN:"buying now", paidH:"pass I have",
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
     intro:"I’m a stage actor and a BASI Pilates instructor. First-timers and stiff bodies are very welcome. Let’s make it 60 minutes that leave you liking your body a little more.",
@@ -340,7 +362,15 @@ const T = {
     pathPre:"登录后依次点击：", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"请选择没有「指名料」（指名费）的那一个。", newMem:"第一次的话请先", reg:"注册会员", guide:"购买方法图解", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
-    msg:(st,dt,menu,paid)=>`【预约申请／予約希望】\n店铺：${st}\n日期：${dt}\n课程：${menu}\n课程券：${paid?"已购买（購入済み）":"还没买（これから購入）"}\n姓名：`,
+    who:"上课次数", first:"第一次", again:"第二次以后",
+    nameL:"姓名（全名）", nameP:"例：王 小美", name2L:"另一位的姓名", tkL:"课程券",
+    mPriv:"私教课", k10:"10次券 ¥67,100（每次 ¥6,710）推荐", k5:"5次券 ¥39,600（每次 ¥7,920）", k1:"单次券 ¥9,900", kHave:"使用已有的次数券",
+    tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
+    haveNote:"不需要再购买，直接进行 ②。", trialOnce:"体验课每人只能上 1 次。从第二次开始买次数券更划算。",
+    firstGuide:"请先在 hacomono 注册会员，然后购买课程券。", regBtn:"注册会员",
+    againP:"从第二次开始，次数券更划算（10次券每次 ¥6,710）",
+    msg:o=>`【预约申请／予約希望】\n姓名：${o.name}${o.name2?`、${o.name2}`:""}\n次数／ご利用：${o.who}\n店铺：${o.st}\n日期：${o.dt}\n课程：${o.menu}\n课程券：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    paidY:"已购买（購入済み）", paidN:"马上购买（これから購入）", paidH:"已有次数券（持っている回数券）",
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
     intro:"我是舞台演员，也是 BASI 普拉提教练。第一次上课、身体比较僵硬都没关系。让这60分钟结束时，你会更喜欢自己的身体一点。",
@@ -417,50 +447,90 @@ function render(){
   }).join("") : `<div class="empty">${L().none}</div>`;
   document.querySelectorAll("button.seg").forEach(b => b.addEventListener("click", () => { const a = +b.dataset.a; openBand = openBand === a ? null : a; render(); }));
   const box = document.getElementById("req");
-  if (box){ box.querySelectorAll("select,input").forEach(el => el.addEventListener("change", updateReq)); updateReq(); }
+  if (box) initReq();
 }
 
-// 申し込み欄（時間・メニュー・チケット → LINE に文を入れて開く）
-let openBand = null, reqMsg = "";
+// 申し込み欄（はじめて／2回目以降・名前・時間・メニュー・チケット → LINE に文を入れて開く）
+let openBand = null, reqMsg = "", reqWho = "first";
+try { const w = localStorage.getItem("who"); if (w === "first" || w === "again") reqWho = w; } catch(e){}
+const esc = v => String(v).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function reqHTML(x){
   const t = L(), opts = [];
   for (let s = x.a; s <= x.b; s += STEP) opts.push(`<option value="${s}">${fmt(s)}${lang==="en"?"–":"〜"}${fmt(s+LESSON)}</option>`);
   const semi = store === "tn" && x.n >= 2;
+  let nm = ""; try { nm = localStorage.getItem("name") || ""; } catch(e){}
   return `<div class="req" id="req">
     <span class="rh">${t.reqH}</span>
+    <label>${t.who}<div class="who" role="group"><button type="button" data-w="first">${t.first}</button><button type="button" data-w="again">${t.again}</button></div></label>
+    <label>${t.nameL}<input type="text" id="rq-n" autocomplete="name" placeholder="${t.nameP}" value="${esc(nm)}"></label>
     <label>${t.reqT}<select id="rq-t">${opts.join("")}</select></label>
-    <label>${t.reqM}<select id="rq-m"><option value="trial">${t.mTrial}</option>${semi ? `<option value="semi">${t.mSemi}</option>` : ""}</select></label>
+    <label>${t.reqM}<select id="rq-m"></select></label>
+    <label id="rq-n2w" hidden>${t.name2L}<input type="text" id="rq-n2" placeholder="${t.nameP}"></label>
+    <label id="rq-kw" hidden>${t.tkL}<select id="rq-k"><option value="10">${t.k10}</option><option value="5">${t.k5}</option><option value="1">${t.k1}</option><option value="have">${t.kHave}</option></select></label>
     <div class="stp">
       <b>${t.st1}</b>
       <p class="rnote" id="rq-tk"></p>
-      <p class="path" id="rq-path"></p>
-      <div class="rbtns"><a class="sub" href="https://tou.hacomono.jp/mypage/purchase/ticket/" target="_blank" rel="noopener">${t.buyNow}</a></div>
-      <span class="small">${t.newMem} <a href="https://tou.hacomono.jp/register/" target="_blank" rel="noopener">${t.reg}</a> ／ <a href="public-img/ticket-guide.jpg" target="_blank" rel="noopener">${t.guide}</a></span>
+      <div id="rq-buy">
+        <p class="rnote" id="rq-first"><b>${t.firstGuide}</b></p>
+        <p class="path" id="rq-path"></p>
+        <div class="rbtns"><a class="sub" id="rq-reg" href="https://tou.hacomono.jp/register/" target="_blank" rel="noopener">${t.regBtn}</a><a class="sub" href="https://tou.hacomono.jp/mypage/purchase/ticket/" target="_blank" rel="noopener">${t.buyNow}</a></div>
+        <span class="small" id="rq-guide"><a href="public-img/ticket-guide.jpg" target="_blank" rel="noopener">${t.guide}</a></span>
+      </div>
     </div>
     <div class="stp">
       <b>${t.st2}</b>
-      <label class="chk"><input type="checkbox" id="rq-p">${t.reqP}</label>
+      <label class="chk" id="rq-pw"><input type="checkbox" id="rq-p">${t.reqP}</label>
       <div class="rbtns"><a id="rq-line" href="#" target="_blank" rel="noopener">${t.reqLine}</a><button type="button" class="copy" id="rq-copy">${t.reqCopy}</button></div>
-    <pre id="rq-msg"></pre>
-    <p class="rnote" style="color:var(--muted)">${t.reqCopyNote}</p>
+      <pre id="rq-msg"></pre>
+      <p class="rnote" style="color:var(--muted)">${t.reqCopyNote}</p>
     </div>
   </div>`;
 }
+function fillMenu(){
+  const t = L(), sel = document.getElementById("rq-m"), prev = sel.value;
+  const x = { semi: store === "tn" && +(document.querySelector('button.seg[aria-expanded="true"] .n')||{textContent:""}).textContent.replace(/\D/g,"") >= 2 };
+  const first = reqWho === "first";
+  sel.innerHTML = `<option value="priv">${first ? t.mTrial : t.mPriv}</option>` + (x.semi ? `<option value="semi">${t.mSemi}</option>` : "");
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+}
 function updateReq(){
-  const t = L(), s = +document.getElementById("rq-t").value, menu = document.getElementById("rq-m").value;
+  const t = L(), box = document.getElementById("req");
+  box.querySelectorAll(".who button").forEach(b => b.setAttribute("aria-pressed", b.dataset.w === reqWho));
+  const first = reqWho === "first";
+  const s = +document.getElementById("rq-t").value, menu = document.getElementById("rq-m").value;
+  const k = document.getElementById("rq-k").value;
+  const semi = menu === "semi", have = !first && !semi && k === "have";
+  document.getElementById("rq-n2w").hidden = !semi;
+  document.getElementById("rq-kw").hidden = first || semi;
+  document.getElementById("rq-buy").hidden = have;
+  document.getElementById("rq-pw").hidden = have;
+  document.getElementById("rq-first").hidden = !first;
+  document.getElementById("rq-reg").hidden = !first;
+  document.getElementById("rq-guide").hidden = !first;
+  const ticket = semi ? t.tSemi : first ? t.tTrial : ({"10":t.tP10,"5":t.tP5,"1":t.tP1}[k] || t.kHave);
+  document.getElementById("rq-tk").textContent = have ? t.haveNote : semi ? t.tkSemi : first ? t.trialOnce : "";
+  document.getElementById("rq-path").innerHTML = `${t.pathPre}<span>${t.tokyo}</span> → <span>${store === "tn" ? t.shopTn : t.shopTd}</span> → <span>${ticket}</span><br>${t.noNom}`;
   const {m,d,w} = keyInfo(selected);
   const dt = lang === "en" ? `${t.wd[w]} ${m}/${d}, ${fmt(s)}–${fmt(s+LESSON)}` : `${m}/${d}（${WD[w]}）${fmt(s)}〜${fmt(s+LESSON)}`;
   const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
-  const mn = menu === "semi" ? t.mSemi : t.mTrial;
-  document.getElementById("rq-tk").textContent = menu === "semi" ? t.tkSemi : t.tkTrial;
-  document.getElementById("rq-path").innerHTML = `${t.pathPre}<span>${t.tokyo}</span> → <span>${store === "tn" ? t.shopTn : t.shopTd}</span> → <span>${menu === "semi" ? t.tSemi : t.tTrial}</span><br>${t.noNom}`;
-  reqMsg = t.msg(st, dt, mn, document.getElementById("rq-p").checked);
+  const name = document.getElementById("rq-n").value.trim();
+  try { localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
+  reqMsg = t.msg({ name, name2: semi ? document.getElementById("rq-n2").value.trim() : "", who: first ? t.first : t.again, st, dt,
+    menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.kHave : ticket.replace(/ ¥[\d,]+$/,""),
+    paid: have ? "" : document.getElementById("rq-p").checked ? t.paidY : t.paidN });
   document.getElementById("rq-msg").textContent = reqMsg;
   document.getElementById("rq-line").href = "https://line.me/R/oaMessage/@277rgyhl/?" + encodeURIComponent(reqMsg);
   const cp = document.getElementById("rq-copy");
   cp.textContent = t.reqCopy;
   cp.onclick = () => navigator.clipboard.writeText(reqMsg).then(() => { cp.textContent = t.copied; }).catch(() => {
     const r = document.createRange(); r.selectNodeContents(document.getElementById("rq-msg")); const g = getSelection(); g.removeAllRanges(); g.addRange(r); });
+}
+function initReq(){
+  const box = document.getElementById("req");
+  box.querySelectorAll(".who button").forEach(b => b.addEventListener("click", () => { reqWho = b.dataset.w; fillMenu(); updateReq(); }));
+  box.querySelectorAll("select,input[type=checkbox]").forEach(el => el.addEventListener("change", updateReq));
+  box.querySelectorAll("input[type=text]").forEach(el => el.addEventListener("input", updateReq));
+  fillMenu(); updateReq();
 }
 
 const [dPart, tPart] = DATA.asof.split(" ");
