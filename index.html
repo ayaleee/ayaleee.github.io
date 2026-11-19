@@ -300,7 +300,7 @@ const T = {
     noNom:"「指名料」が付いていないものを選んでください。", newMem:"はじめての方は先に", reg:"会員登録", guide:"買い方の画像", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
     who:"ご利用", first:"はじめて", again:"2回目以降",
     nameL:"お名前（フルネーム）", nameP:"例：山田 花子", name2L:"もう1人のお名前", tkL:"チケット",
-    mPriv:"プライベートレッスン", k10:"10回券 ¥67,100（1回 ¥6,710）おすすめ", k5:"5回券 ¥39,600（1回 ¥7,920）", k1:"1回券 ¥9,900", kHave:"持っている回数券を使う",
+    mPriv:"プライベートレッスン", k10:"10回券 ¥67,100（1回 ¥6,710）おすすめ", k5:"5回券 ¥39,600（1回 ¥7,920）", k1:"1回券 ¥9,900", kHave:"回数券を持っている（買わなくてOK）", haveMsg:"持っている回数券を使う",
     tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
     haveNote:"新しく買う必要はありません。そのまま ② へ進んでください。", trialOnce:"体験はお一人1回だけです。2回目からは回数券がお得です。",
     firstGuide:"まず hacomono の会員登録をしてから、チケットを購入してください。", regBtn:"会員登録する",
@@ -341,7 +341,7 @@ const T = {
     noNom:"Choose the one without “指名料” (nomination fee).", newMem:"First time? Please", reg:"sign up", guide:"Picture guide", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
     who:"Visit", first:"First time", again:"Been before",
     nameL:"Your full name", nameP:"e.g. Hanako Yamada", name2L:"Second person’s name", tkL:"Ticket",
-    mPriv:"Private lesson", k10:"10-lesson pass ¥67,100 (¥6,710 each) recommended", k5:"5-lesson pass ¥39,600 (¥7,920 each)", k1:"Single ¥9,900", kHave:"Use a pass I already have",
+    mPriv:"Private lesson", k10:"10-lesson pass ¥67,100 (¥6,710 each) recommended", k5:"5-lesson pass ¥39,600 (¥7,920 each)", k1:"Single ¥9,900", kHave:"I already have a pass (no need to buy)", haveMsg:"using my pass",
     tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
     haveNote:"No need to buy anything. Go straight to ②.", trialOnce:"The trial is once per person. From your 2nd visit, a pass is the best value.",
     firstGuide:"First sign up on hacomono, then buy the ticket.", regBtn:"Sign up",
@@ -382,7 +382,7 @@ const T = {
     noNom:"请选择没有「指名料」（指名费）的那一个。", newMem:"第一次的话请先", reg:"注册会员", guide:"购买方法图解", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
     who:"上课次数", first:"第一次", again:"第二次以后",
     nameL:"姓名（全名）", nameP:"例：王 小美", name2L:"另一位的姓名", tkL:"课程券",
-    mPriv:"私教课", k10:"10次券 ¥67,100（每次 ¥6,710）推荐", k5:"5次券 ¥39,600（每次 ¥7,920）", k1:"单次券 ¥9,900", kHave:"使用已有的次数券",
+    mPriv:"私教课", k10:"10次券 ¥67,100（每次 ¥6,710）推荐", k5:"5次券 ¥39,600（每次 ¥7,920）", k1:"单次券 ¥9,900", kHave:"已有次数券（不用再买）", haveMsg:"使用已有的次数券（持っている回数券）",
     tP10:"プライベートレッスン10回券(入会金あり) ¥67,100", tP5:"プライベートレッスン5回券(入会金あり) ¥39,600", tP1:"プライベートレッスン1回券(入会金あり) ¥9,900",
     haveNote:"不需要再购买，直接进行 ②。", trialOnce:"体验课每人只能上 1 次。从第二次开始买次数券更划算。",
     firstGuide:"请先在 hacomono 注册会员，然后购买课程券。", regBtn:"注册会员",
@@ -490,7 +490,7 @@ function reqHTML(x){
     <label>${t.reqM}<select id="rq-m"></select></label>
     <label id="rq-n2w" hidden>${t.name2L}<input type="text" id="rq-n2" placeholder="${t.nameP}"></label>
     <label>${t.alt}<div class="alt"><select id="rq-ad"></select><select id="rq-at"></select></div></label>
-    <label id="rq-kw" hidden>${t.tkL}<select id="rq-k"><option value="10">${t.k10}</option><option value="5">${t.k5}</option><option value="1">${t.k1}</option><option value="have">${t.kHave}</option></select></label>
+    <label id="rq-kw" hidden>${t.tkL}<select id="rq-k"><option value="have">${t.kHave}</option><option value="10">${t.k10}</option><option value="5">${t.k5}</option><option value="1">${t.k1}</option></select></label>
     <div class="stp">
       <b>${t.st1}</b>
       <p class="rnote" id="rq-tk"></p>
@@ -548,14 +548,14 @@ function updateReq(){
   document.getElementById("rq-guide").hidden = !first;
   const ticket = semi ? t.tSemi : first ? t.tTrial : ({"10":t.tP10,"5":t.tP5,"1":t.tP1}[k] || t.kHave);
   document.getElementById("rq-tk").textContent = have ? t.haveNote : semi ? t.tkSemi : first ? t.trialOnce : "";
-  document.getElementById("rq-path").innerHTML = `${t.pathPre}<span>${t.tokyo}</span> → <span>${store === "tn" ? t.shopTn : t.shopTd}</span> → <span>${ticket}</span><br>${t.noNom}`;
+  document.getElementById("rq-path").innerHTML = `<span>${store === "tn" ? t.shopTn : t.shopTd}</span> → <span>${ticket}</span><br>${t.noNom}`;
   const {m,d,w} = keyInfo(selected);
   const dt = lang === "en" ? `${t.wd[w]} ${m}/${d}, ${fmt(s)}–${fmt(s+LESSON)}` : `${m}/${d}（${WD[w]}）${fmt(s)}〜${fmt(s+LESSON)}`;
   const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
   const name = first ? document.getElementById("rq-n").value.trim() : "";
   try { if (first) localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
   reqMsg = t.msg({ name, name2: "", who: first ? t.first : t.again, st, dt,
-    menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.kHave : ticket.replace(/ ¥[\d,]+$/,""),
+    menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.haveMsg : ticket.replace(/ ¥[\d,]+$/,""),
     alt: document.getElementById("rq-ad").value && document.getElementById("rq-at").value ? dtLabel(document.getElementById("rq-ad").value, +document.getElementById("rq-at").value) : "",
     paid: have ? "" : document.getElementById("rq-p").checked ? t.paidY : t.paidN });
   document.getElementById("rq-msg").textContent = reqMsg;
