@@ -130,6 +130,7 @@ button.seg[aria-expanded="true"] .go{transform:rotate(90deg)}
 .req .rbtns a{display:inline-flex;padding:11px 16px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-size:14px;letter-spacing:.06em}
 .req pre{margin:0;white-space:pre-wrap;font:inherit;font-size:12.5px;line-height:1.6;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:10px}
 .price2{font-size:12.5px;color:var(--muted)}
+.stale{margin:0;padding:10px 12px;border:1px solid var(--ok);color:var(--ok);font-size:13px;line-height:1.7}
 .req input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line-strong);border-radius:0;padding:9px 10px}
 .req .who{display:flex;border:1px solid var(--line-strong)}
 .req .who button{flex:1;font:inherit;font-size:14px;padding:9px 6px;border:0;background:var(--bg);color:var(--muted);cursor:pointer}
@@ -174,6 +175,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
 
   <section class="panel" aria-live="polite">
     <div class="ptitle"><b id="ptitle"></b><span class="summary" id="summary"></span></div>
+    <p class="stale" id="stale" hidden></p>
     <div class="grid" id="grid"></div>
   </section>
 
@@ -249,6 +251,15 @@ const DATA = {
   me: {
     "2026-11-19": ["10:00-11:00","20:15-21:15"],
     "2026-11-26": ["15:30-16:30"]
+  },
+  // Ayalee のカレンダーの予定（時間だけ。名前は入れない。SNS・台本の時間は入れない）。"終日" はその日まるごと埋まり
+  busy: {
+    "2026-11-19": ["10:00-11:00", "20:15-21:15"],
+    "2026-11-24": ["21:00-22:00"],
+    "2026-11-26": ["15:30-16:30"],
+    "2026-11-27": ["終日"],
+    "2026-11-28": ["終日"],
+    "2026-12-01": ["21:00-22:00"]
   }
 };
 /* ===== ここまで ===== */
@@ -280,10 +291,11 @@ const T = {
     s2:"hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。先に買っておくと、すぐに確定できます。",
     s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"もし埋まっていたら、別の時間をご案内します。チケットはほかの日にもそのまま使えます。", ig:"",
     semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）",
+    stale:(m,d)=>`空き情報が古くなっています（${m}/${d} 時点）。表示とちがうことがあるので、LINE でお問い合わせください。`,
     alt:"第2希望（あれば）", altNone:"なし", altKey:"第2希望",
     reqH:"この時間で申し込む", reqT:"開始時間", reqM:"メニュー", reqP:"チケットはもう買いました",
     mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600",
-    tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
+    tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お連れの方も hacomono の会員登録とチケット購入をお願いします。お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
     reqLine:"LINE で申し込む", reqCopy:"文をコピー",
     st1:"① チケットを買う", st2:"② LINE で申し込む", buyNow:"チケットを買う（hacomono）",
     pathPre:"ログインして、", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
@@ -319,10 +331,11 @@ const T = {
     s3:"When you get “Your booking is confirmed” from me on LINE, you’re all set.",
     note2:"If the time has just filled up, I’ll suggest another time — your ticket can be used on any day. No LINE? Copy the message and send it as an Instagram DM (@ayaka_leee). The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
     semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person)",
+    stale:(m,d)=>`This availability is out of date (as of ${m}/${d}). Times may have changed — please ask on LINE.`,
     alt:"Second choice (optional)", altNone:"None", altKey:"2nd choice",
     reqH:"Request this time", reqT:"Start time", reqM:"Menu", reqP:"I’ve already bought the ticket",
     mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person",
-    tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
+    tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Your partner also needs to sign up on hacomono and buy a ticket. Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
     reqLine:"Request on LINE", reqCopy:"Copy message",
     st1:"① Buy a ticket", st2:"② Request on LINE", buyNow:"Buy a ticket (hacomono)",
     pathPre:"Log in, then tap: ", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
@@ -358,10 +371,11 @@ const T = {
     s3:"收到 Ayalee 发来的「预约确定」LINE 就完成了。",
     note2:"如果刚好被约满，我会为您推荐其他时间，课程券可以用于其他日期。没有 LINE 的话，可以复制内容在 Instagram（@ayaka_leee）私信我。hacomono 购票页面是日文的，如有不明白的地方，欢迎随时问我。", ig:"Instagram 私信",
     semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）",
+    stale:(m,d)=>`空位信息已过时（${m}/${d} 时点），可能与实际不同，请通过 LINE 咨询。`,
     alt:"第二希望（可选）", altNone:"无", altKey:"第二希望／第2希望",
     reqH:"申请这个时间", reqT:"开始时间", reqM:"课程", reqP:"我已经购买了课程券",
     mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600",
-    tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
+    tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"同行的朋友也需要在 hacomono 注册会员并购买课程券。请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
     reqLine:"通过 LINE 申请", reqCopy:"复制内容",
     st1:"① 购买课程券", st2:"② 通过 LINE 申请", buyNow:"购买课程券（hacomono）",
     pathPre:"登录后依次点击：", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
@@ -394,7 +408,9 @@ const keyInfo = key => { const [y,m,d] = key.split("-").map(Number); const w = n
 // その日に始められる時刻の一覧
 function startsFor(store, key){
   if (CLOSED_DAYS.includes(key)) return [];
-  const me = blocked((DATA.me||{})[key] || []);
+  const busy = (DATA.busy||{})[key] || [];
+  if (busy.includes("終日")) return [];
+  const me = blocked(((DATA.me||{})[key] || []).concat(busy));
   let ok;
   if (store === "td"){
     const blk = blocked(DATA.td[key] || []).concat(me);
@@ -438,6 +454,9 @@ function render(){
   if (selBtn) selBtn.scrollIntoView({block:"nearest", inline:"nearest"});
 
   if (!selected){ document.getElementById("ptitle").textContent = ""; document.getElementById("grid").innerHTML = `<div class="empty">${L().prep}</div>`; return; }
+  { const [y,mo,da] = dPart.split("-").map(Number), [hh,mm] = tPart.split(":").map(Number);
+    const old = Date.now() - new Date(y, mo-1, da, hh, mm).getTime() > 24*3600*1000;
+    const el = document.getElementById("stale"); el.hidden = !old; if (old) el.textContent = L().stale(mo, da); }
   const {m,d,w} = keyInfo(selected);
   const bs = bands(startsFor(store, selected), selected);
   document.getElementById("ptitle").textContent = L().day(m, d, L().wd[w], L()[store]);
