@@ -263,7 +263,7 @@ const DATA = {
 // 終日埋まりにする日（DATA の外。毎朝の自動更新では消えない）。2026-11-28＝押さえ、11/20 の結果で解除か確定
 const CLOSED_DAYS = ["2026-11-28"];
 const OPEN = 8*60, CLOSE = 21*60, BUFFER = 30, LESSON = 60, STEP = 30;
-const TICKET_TRAVEL = 60, TICKET_MARGIN = 30;
+const TICKET_TRAVEL = 60, TICKET_MARGIN = 30, LEAD_HOURS = 24;
 // R1〜R6 は青葉台用でまだ使えない（2026-11-18）。中目黒は GP1〜GP6 だけで数える
 const TN_REFORMERS = ["GP1","GP2","GP3","GP4","GP5","GP6"];
 const toMin = s => { const [h,m] = s.split(":").map(Number); return h*60+m; };
@@ -280,7 +280,7 @@ const T = {
     storeLabel:"店舗", dateLabel:"日付", td:"代官山", tn:"中目黒",
     wd:["日","月","火","水","木","金","土"], today:"今日", open:"空きあり", full:"満",
     day:(m,d,w,st)=>`${m}/${d}（${w}）${st}`, startsAt:"開始できる時間",
-    one:"スタート", range:"の間にスタート", left:n=>`残り${n}名`, none:"この日は空きがありません。ほかの日をお選びください。",
+    one:"スタート", range:"の間にスタート", left:n=>`残り${n}名`, none:"この日は空きがありません。ほかの日をお選びください。", soon:"ページからのお申し込みは24時間前までです。直前のご予約は LINE でご相談ください。",
     prep:"ただいま空き情報を準備中です。LINE でお問い合わせください。",
     asof:(m,d,t)=>`最終更新 ${m}/${d} ${t}（毎日 7時・12時・17時ごろ更新）`,
     howH:"ご予約のしかた", trial:"体験レッスン 60分",
@@ -320,7 +320,7 @@ const T = {
     storeLabel:"Studio", dateLabel:"Date", td:"Daikanyama", tn:"Nakameguro",
     wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], today:"Today", open:"Open", full:"Full",
     day:(m,d,w,st)=>`${w} ${m}/${d} · ${st}`, startsAt:"Start times",
-    one:"start", range:"start any time", left:n=>`${n} ${n===1?"spot":"spots"} left`, none:"No openings on this day. Please choose another day.",
+    one:"start", range:"start any time", left:n=>`${n} ${n===1?"spot":"spots"} left`, none:"No openings on this day. Please choose another day.", soon:"Online requests close 24 hours before. For last-minute bookings, please ask on LINE.",
     prep:"Availability is being updated. Please ask on LINE.",
     asof:(m,d,t)=>`Last updated ${m}/${d} ${t} (updated daily around 7:00, 12:00 and 17:00)`,
     howH:"How to book", trial:"Trial lesson, 60 min",
@@ -361,7 +361,7 @@ const T = {
     storeLabel:"店铺", dateLabel:"日期", td:"代官山", tn:"中目黑",
     wd:["日","一","二","三","四","五","六"], today:"今天", open:"有空位", full:"已满",
     day:(m,d,w,st)=>`${m}/${d}（周${w}）${st}`, startsAt:"可开始的时间",
-    one:"开始", range:"之间开始", left:n=>`剩余${n}名`, none:"这一天已约满，请选择其他日期。",
+    one:"开始", range:"之间开始", left:n=>`剩余${n}名`, none:"这一天已约满，请选择其他日期。", soon:"网页申请需提前 24 小时。临时预约请通过 LINE 咨询。",
     prep:"空位信息更新中，请通过 LINE 咨询。",
     asof:(m,d,t)=>`最后更新 ${m}/${d} ${t}（每天约 7点・12点・17点更新）`,
     howH:"预约方式", trial:"体验课 60分钟",
@@ -426,8 +426,8 @@ function startsFor(store, key){
   } else {
     ok = STARTS.filter(s => fits(me, s) && tnLeft(key, s) > 0);
   }
-  // 今日は2時間後より前の時刻を出さない
-  if (key === tKey) ok = ok.filter(s => s >= nowMin + 120);
+  // 申し込みは開始の24時間前まで（2026-11-19 Ayalee）。それより近い枠は出さない
+  { const [y,mo,da] = key.split("-").map(Number); ok = ok.filter(s => new Date(y, mo-1, da, 0, s).getTime() - Date.now() >= LEAD_HOURS*3600*1000); }
   return ok;
 }
 // 中目黒：その時刻に空いているリフォーマーの台数（＝入れる人数）
@@ -435,6 +435,8 @@ function tnLeft(key, s){
   const map = DATA.tn[key] || {};
   return TN_REFORMERS.filter(u => fits(blocked(map[u] || []), s)).length;
 }
+// その日の最初の枠が24時間以内＝当日・翌日（一部が締め切り済み）。空きがなければここは「LINE でご相談ください」と出す
+function isSoon(key){ const [y,mo,da] = key.split("-").map(Number); return new Date(y, mo-1, da, 0, OPEN).getTime() - Date.now() < LEAD_HOURS*3600*1000; }
 // 続いている開始時刻を帯にまとめる（中目黒は残り人数が同じものだけ）
 function bands(starts, key){
   const out = [];
@@ -476,7 +478,7 @@ function render(){
       ? `<span class="t">${fmt(x.a)}</span><span class="s">${L().one}</span>`
       : `<span class="t">${fmt(x.a)}${lang==="en"?"–":"〜"}${fmt(x.b)}</span><span class="s">${L().range}</span>`;
     return `<button type="button" class="seg" data-a="${x.a}" aria-expanded="${open}">${head}<span class="n">${x.n ? L().left(x.n) : ""}</span><span class="go" aria-hidden="true">›</span></button>` + (open ? reqHTML(x) : "");
-  }).join("") : `<div class="empty">${L().none}</div>`;
+  }).join("") : `<div class="empty">${isSoon(selected) ? L().soon : L().none}</div>`;
   document.querySelectorAll("button.seg").forEach(b => b.addEventListener("click", () => { const a = +b.dataset.a; openBand = openBand === a ? null : a; render(); }));
   const box = document.getElementById("req");
   if (box) initReq();
