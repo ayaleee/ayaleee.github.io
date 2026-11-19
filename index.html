@@ -114,6 +114,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .langs button:focus-visible{outline:1px solid var(--on-photo);outline-offset:2px}
 .how .note2{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
 .how .note2:empty{display:none}
+button.seg{width:100%;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);text-align:left;cursor:pointer}
+button.seg .go{font-size:15px;color:var(--muted);line-height:1}
+button.seg[aria-expanded="true"]{background:var(--wash)}
+button.seg[aria-expanded="true"] .go{transform:rotate(90deg)}
+.seg{grid-template-columns:10px 1fr auto auto 12px!important}
+.req{display:flex;flex-direction:column;gap:12px;padding:16px 14px 18px;background:var(--wash);border-bottom:1px solid var(--line)}
+.req .rh{font-size:13px;letter-spacing:.08em;color:var(--muted)}
+.req label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.req select{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line-strong);border-radius:0;padding:9px 10px}
+.req .chk{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--fg)}
+.req .chk input{width:18px;height:18px;accent-color:var(--ok)}
+.req .rnote{margin:0;font-size:12.5px;line-height:1.7;color:var(--fg)}
+.req .rbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.req .rbtns a{display:inline-flex;padding:11px 16px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-size:14px;letter-spacing:.06em}
+.req pre{margin:0;white-space:pre-wrap;font:inherit;font-size:12.5px;line-height:1.6;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:10px}
+.price2{font-size:12.5px;color:var(--muted)}
 footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid var(--line);padding-top:14px}
 </style>
 </head>
@@ -152,6 +168,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <span class="sec-en">How to book</span>
     <h2 data-i="howH">ご予約のしかた</h2>
     <div class="price"><span data-i="trial">体験レッスン 60分</span><b>¥5,000</b></div>
+    <div class="price2" data-i="semiP">中目黒は2名のセミプライベートもできます（1人 ¥6,600）</div>
     <ol>
       <li data-i="s1">LINE で「店舗・希望の日にち・開始時間」を送ってください。</li>
       <li data-i="s2" data-html>Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。</li>
@@ -244,9 +261,15 @@ const T = {
     prep:"ただいま空き情報を準備中です。LINE でお問い合わせください。",
     asof:(m,d,t)=>`${m}/${d} ${t} 時点の空き（30分ごと）`,
     howH:"ご予約のしかた", trial:"体験レッスン 60分",
-    s1:"LINE で「店舗・希望の日にち・開始時間」を送ってください。",
-    s2:"Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。",
-    s3:"「チケット買いました」と LINE をいただいたら、ご予約確定です。", note2:"", ig:"",
+    s1:"上の空き時間をタップして、時間とメニューを選び「LINE で申し込む」を押してください。送る文は自動で入ります。",
+    s2:"hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。先に買っておくと、すぐに確定できます。",
+    s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"もし埋まっていたら、別の時間をご案内します。チケットはほかの日にもそのまま使えます。", ig:"",
+    semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）",
+    reqH:"この時間で申し込む", reqT:"開始時間", reqM:"メニュー", reqP:"チケットはもう買いました",
+    mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600",
+    tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
+    reqLine:"LINE で申し込む", reqCopy:"文をコピー", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
+    msg:(st,dt,menu,paid)=>`【予約希望】\n店舗：${st}\n日時：${dt}\nメニュー：${menu}\nチケット：${paid?"購入済み":"これから購入"}\nお名前：`,
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
     intro:"舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。",
@@ -263,10 +286,16 @@ const T = {
     prep:"Availability is being updated. Please ask on LINE.",
     asof:(m,d,t)=>`As of ${m}/${d} ${t} (30-min steps)`,
     howH:"Booking in 3 steps", trial:"Trial lesson, 60 min",
-    s1:"Send me your preferred studio, date and start time on LINE or Instagram DM.",
-    s2:"After I reply, buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b>",
-    s3:"Message me “I bought the ticket”, and your booking is confirmed.",
-    note2:"No LINE? Send me a DM on Instagram (@ayaka_leee) instead. The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
+    s1:"Tap an open time above, choose the start time and menu, then press “Request on LINE”. The message is filled in for you.",
+    s2:"Buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b> If you buy it first, I can confirm right away.",
+    s3:"When you get “Your booking is confirmed” from me on LINE, you’re all set.",
+    note2:"If the time has just filled up, I’ll suggest another time — your ticket can be used on any day. No LINE? Copy the message and send it as an Instagram DM (@ayaka_leee). The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
+    semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person)",
+    reqH:"Request this time", reqT:"Start time", reqM:"Menu", reqP:"I’ve already bought the ticket",
+    mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person",
+    tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
+    reqLine:"Request on LINE", reqCopy:"Copy message", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
+    msg:(st,dt,menu,paid)=>`[Booking request]\nStudio: ${st}\nDate: ${dt}\nMenu: ${menu}\nTicket: ${paid?"bought":"not yet"}\nName: `,
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
     intro:"I’m a stage actor and a BASI Pilates instructor. First-timers and stiff bodies are very welcome. Let’s make it 60 minutes that leave you liking your body a little more.",
@@ -283,10 +312,16 @@ const T = {
     prep:"空位信息更新中，请通过 LINE 咨询。",
     asof:(m,d,t)=>`${m}/${d} ${t} 的空位（每30分钟）`,
     howH:"预约方式", trial:"体验课 60分钟",
-    s1:"请通过 LINE 或 Instagram 私信发送「店铺・希望日期・开始时间」。",
-    s2:"收到 Ayalee 的回复后，请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>，并购买课程券。",
-    s3:"购买后告诉我「已购买」，预约即确定。",
-    note2:"没有 LINE 的话，也可以在 Instagram（@ayaka_leee）私信我。hacomono 购票页面是日文的，如有不明白的地方，欢迎随时问我。", ig:"Instagram 私信",
+    s1:"点击上方的空位时间，选择开始时间和课程，然后按「通过 LINE 申请」。要发送的内容会自动填好。",
+    s2:"请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>并购买课程券。先购买的话可以马上确定。",
+    s3:"收到 Ayalee 发来的「预约确定」LINE 就完成了。",
+    note2:"如果刚好被约满，我会为您推荐其他时间，课程券可以用于其他日期。没有 LINE 的话，可以复制内容在 Instagram（@ayaka_leee）私信我。hacomono 购票页面是日文的，如有不明白的地方，欢迎随时问我。", ig:"Instagram 私信",
+    semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）",
+    reqH:"申请这个时间", reqT:"开始时间", reqM:"课程", reqP:"我已经购买了课程券",
+    mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600",
+    tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
+    reqLine:"通过 LINE 申请", reqCopy:"复制内容", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
+    msg:(st,dt,menu,paid)=>`【预约申请／予約希望】\n店铺：${st}\n日期：${dt}\n课程：${menu}\n课程券：${paid?"已购买（購入済み）":"还没买（これから購入）"}\n姓名：`,
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
     intro:"我是舞台演员，也是 BASI 普拉提教练。第一次上课、身体比较僵硬都没关系。让这60分钟结束时，你会更喜欢自己的身体一点。",
@@ -344,7 +379,7 @@ function render(){
     return `<button type="button" class="dbtn ${k===tKey?"today":""}" data-k="${k}" aria-pressed="${k===selected}">
       <span class="w ${wcls}">${k===tKey?L().today:L().wd[w]}</span><span class="d">${m}/${d}</span><span class="lv ${n?"ok":""}">${n?L().open:L().full}</span></button>`;
   }).join("");
-  document.querySelectorAll(".dbtn").forEach(b => b.addEventListener("click", () => { selected = b.dataset.k; render(); }));
+  document.querySelectorAll(".dbtn").forEach(b => b.addEventListener("click", () => { selected = b.dataset.k; openBand = null; render(); }));
   const selBtn = document.querySelector('.dbtn[aria-pressed="true"]');
   if (selBtn) selBtn.scrollIntoView({block:"nearest", inline:"nearest"});
 
@@ -353,11 +388,50 @@ function render(){
   const bs = bands(startsFor(store, selected), selected);
   document.getElementById("ptitle").textContent = L().day(m, d, L().wd[w], L()[store]);
   document.getElementById("summary").textContent = bs.length ? L().startsAt : "";
-  document.getElementById("grid").innerHTML = bs.length ? bs.map(x =>
-    x.a === x.b
-      ? `<div class="seg"><span class="t">${fmt(x.a)}</span><span class="s">${L().one}</span><span class="n">${x.n ? L().left(x.n) : ""}</span></div>`
-      : `<div class="seg"><span class="t">${fmt(x.a)}${lang==="en"?"–":"〜"}${fmt(x.b)}</span><span class="s">${L().range}</span><span class="n">${x.n ? L().left(x.n) : ""}</span></div>`
-  ).join("") : `<div class="empty">${L().none}</div>`;
+  if (openBand && !bs.some(x => x.a === openBand)) openBand = null;
+  document.getElementById("grid").innerHTML = bs.length ? bs.map(x => {
+    const open = x.a === openBand;
+    const head = x.a === x.b
+      ? `<span class="t">${fmt(x.a)}</span><span class="s">${L().one}</span>`
+      : `<span class="t">${fmt(x.a)}${lang==="en"?"–":"〜"}${fmt(x.b)}</span><span class="s">${L().range}</span>`;
+    return `<button type="button" class="seg" data-a="${x.a}" aria-expanded="${open}">${head}<span class="n">${x.n ? L().left(x.n) : ""}</span><span class="go" aria-hidden="true">›</span></button>` + (open ? reqHTML(x) : "");
+  }).join("") : `<div class="empty">${L().none}</div>`;
+  document.querySelectorAll("button.seg").forEach(b => b.addEventListener("click", () => { const a = +b.dataset.a; openBand = openBand === a ? null : a; render(); }));
+  const box = document.getElementById("req");
+  if (box){ box.querySelectorAll("select,input").forEach(el => el.addEventListener("change", updateReq)); updateReq(); }
+}
+
+// 申し込み欄（時間・メニュー・チケット → LINE に文を入れて開く）
+let openBand = null, reqMsg = "";
+function reqHTML(x){
+  const t = L(), opts = [];
+  for (let s = x.a; s <= x.b; s += STEP) opts.push(`<option value="${s}">${fmt(s)}${lang==="en"?"–":"〜"}${fmt(s+LESSON)}</option>`);
+  const semi = store === "tn" && x.n >= 2;
+  return `<div class="req" id="req">
+    <span class="rh">${t.reqH}</span>
+    <label>${t.reqT}<select id="rq-t">${opts.join("")}</select></label>
+    <label>${t.reqM}<select id="rq-m"><option value="trial">${t.mTrial}</option>${semi ? `<option value="semi">${t.mSemi}</option>` : ""}</select></label>
+    <p class="rnote" id="rq-tk"></p>
+    <label class="chk"><input type="checkbox" id="rq-p">${t.reqP}</label>
+    <div class="rbtns"><a id="rq-line" href="#" target="_blank" rel="noopener">${t.reqLine}</a><button type="button" class="copy" id="rq-copy">${t.reqCopy}</button></div>
+    <pre id="rq-msg"></pre>
+    <p class="rnote" style="color:var(--muted)">${t.reqCopyNote}</p>
+  </div>`;
+}
+function updateReq(){
+  const t = L(), s = +document.getElementById("rq-t").value, menu = document.getElementById("rq-m").value;
+  const {m,d,w} = keyInfo(selected);
+  const dt = lang === "en" ? `${t.wd[w]} ${m}/${d}, ${fmt(s)}–${fmt(s+LESSON)}` : `${m}/${d}（${WD[w]}）${fmt(s)}〜${fmt(s+LESSON)}`;
+  const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
+  const mn = menu === "semi" ? t.mSemi : t.mTrial;
+  document.getElementById("rq-tk").textContent = menu === "semi" ? t.tkSemi : t.tkTrial;
+  reqMsg = t.msg(st, dt, mn, document.getElementById("rq-p").checked);
+  document.getElementById("rq-msg").textContent = reqMsg;
+  document.getElementById("rq-line").href = "https://line.me/R/oaMessage/@277rgyhl/?" + encodeURIComponent(reqMsg);
+  const cp = document.getElementById("rq-copy");
+  cp.textContent = t.reqCopy;
+  cp.onclick = () => navigator.clipboard.writeText(reqMsg).then(() => { cp.textContent = t.copied; }).catch(() => {
+    const r = document.createRange(); r.selectNodeContents(document.getElementById("rq-msg")); const g = getSelection(); g.removeAllRanges(); g.addRange(r); });
 }
 
 const [dPart, tPart] = DATA.asof.split(" ");
@@ -371,7 +445,7 @@ document.getElementById("copy").addEventListener("click", e => {
 
 try { const s = localStorage.getItem("store"); if (s === "td" || s === "tn") store = s; } catch(e){}
 function setStore(s){
-  store = s;
+  store = s; openBand = null;
   document.getElementById("btn-td").setAttribute("aria-pressed", s==="td");
   document.getElementById("btn-tn").setAttribute("aria-pressed", s==="tn");
   try { localStorage.setItem("store", s); } catch(e){}
