@@ -130,6 +130,13 @@ button.seg[aria-expanded="true"] .go{transform:rotate(90deg)}
 .req .rbtns a{display:inline-flex;padding:11px 16px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-size:14px;letter-spacing:.06em}
 .req pre{margin:0;white-space:pre-wrap;font:inherit;font-size:12.5px;line-height:1.6;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:10px}
 .price2{font-size:12.5px;color:var(--muted)}
+.req .stp{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line-strong);padding-top:12px}
+.req .stp b{font-size:13px;font-weight:500;letter-spacing:.06em}
+.req .path{margin:0;font-size:13px;line-height:1.7}
+.req .path span{display:inline-block;border:1px solid var(--line-strong);background:var(--bg);padding:1px 7px;margin:2px 0}
+.req .rbtns a.sub{background:none;color:var(--fg);border:1px solid var(--fg);padding:10px 15px}
+.req .small{font-size:12px;color:var(--muted)}
+.req .small a{color:var(--muted)}
 footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid var(--line);padding-top:14px}
 </style>
 </head>
@@ -268,7 +275,11 @@ const T = {
     reqH:"この時間で申し込む", reqT:"開始時間", reqM:"メニュー", reqP:"チケットはもう買いました",
     mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600",
     tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
-    reqLine:"LINE で申し込む", reqCopy:"文をコピー", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
+    reqLine:"LINE で申し込む", reqCopy:"文をコピー",
+    st1:"① チケットを買う", st2:"② LINE で申し込む", buyNow:"チケットを買う（hacomono）",
+    pathPre:"ログインして、", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
+    tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
+    noNom:"「指名料」が付いていないものを選んでください。", newMem:"はじめての方は先に", reg:"会員登録", guide:"買い方の画像", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
     msg:(st,dt,menu,paid)=>`【予約希望】\n店舗：${st}\n日時：${dt}\nメニュー：${menu}\nチケット：${paid?"購入済み":"これから購入"}\nお名前：`,
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
@@ -294,7 +305,11 @@ const T = {
     reqH:"Request this time", reqT:"Start time", reqM:"Menu", reqP:"I’ve already bought the ticket",
     mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person",
     tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
-    reqLine:"Request on LINE", reqCopy:"Copy message", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
+    reqLine:"Request on LINE", reqCopy:"Copy message",
+    st1:"① Buy a ticket", st2:"② Request on LINE", buyNow:"Buy a ticket (hacomono)",
+    pathPre:"Log in, then tap: ", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
+    tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
+    noNom:"Choose the one without “指名料” (nomination fee).", newMem:"First time? Please", reg:"sign up", guide:"Picture guide", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
     msg:(st,dt,menu,paid)=>`[Booking request]\nStudio: ${st}\nDate: ${dt}\nMenu: ${menu}\nTicket: ${paid?"bought":"not yet"}\nName: `,
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
@@ -320,7 +335,11 @@ const T = {
     reqH:"申请这个时间", reqT:"开始时间", reqM:"课程", reqP:"我已经购买了课程券",
     mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600",
     tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
-    reqLine:"通过 LINE 申请", reqCopy:"复制内容", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
+    reqLine:"通过 LINE 申请", reqCopy:"复制内容",
+    st1:"① 购买课程券", st2:"② 通过 LINE 申请", buyNow:"购买课程券（hacomono）",
+    pathPre:"登录后依次点击：", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
+    tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
+    noNom:"请选择没有「指名料」（指名费）的那一个。", newMem:"第一次的话请先", reg:"注册会员", guide:"购买方法图解", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
     msg:(st,dt,menu,paid)=>`【预约申请／予約希望】\n店铺：${st}\n日期：${dt}\n课程：${menu}\n课程券：${paid?"已购买（購入済み）":"还没买（これから購入）"}\n姓名：`,
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
@@ -411,11 +430,20 @@ function reqHTML(x){
     <span class="rh">${t.reqH}</span>
     <label>${t.reqT}<select id="rq-t">${opts.join("")}</select></label>
     <label>${t.reqM}<select id="rq-m"><option value="trial">${t.mTrial}</option>${semi ? `<option value="semi">${t.mSemi}</option>` : ""}</select></label>
-    <p class="rnote" id="rq-tk"></p>
-    <label class="chk"><input type="checkbox" id="rq-p">${t.reqP}</label>
-    <div class="rbtns"><a id="rq-line" href="#" target="_blank" rel="noopener">${t.reqLine}</a><button type="button" class="copy" id="rq-copy">${t.reqCopy}</button></div>
+    <div class="stp">
+      <b>${t.st1}</b>
+      <p class="rnote" id="rq-tk"></p>
+      <p class="path" id="rq-path"></p>
+      <div class="rbtns"><a class="sub" href="https://tou.hacomono.jp/mypage/purchase/ticket/" target="_blank" rel="noopener">${t.buyNow}</a></div>
+      <span class="small">${t.newMem} <a href="https://tou.hacomono.jp/register/" target="_blank" rel="noopener">${t.reg}</a> ／ <a href="public-img/ticket-guide.jpg" target="_blank" rel="noopener">${t.guide}</a></span>
+    </div>
+    <div class="stp">
+      <b>${t.st2}</b>
+      <label class="chk"><input type="checkbox" id="rq-p">${t.reqP}</label>
+      <div class="rbtns"><a id="rq-line" href="#" target="_blank" rel="noopener">${t.reqLine}</a><button type="button" class="copy" id="rq-copy">${t.reqCopy}</button></div>
     <pre id="rq-msg"></pre>
     <p class="rnote" style="color:var(--muted)">${t.reqCopyNote}</p>
+    </div>
   </div>`;
 }
 function updateReq(){
@@ -425,6 +453,7 @@ function updateReq(){
   const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
   const mn = menu === "semi" ? t.mSemi : t.mTrial;
   document.getElementById("rq-tk").textContent = menu === "semi" ? t.tkSemi : t.tkTrial;
+  document.getElementById("rq-path").innerHTML = `${t.pathPre}<span>${t.tokyo}</span> → <span>${store === "tn" ? t.shopTn : t.shopTd}</span> → <span>${menu === "semi" ? t.tSemi : t.tTrial}</span><br>${t.noNom}`;
   reqMsg = t.msg(st, dt, mn, document.getElementById("rq-p").checked);
   document.getElementById("rq-msg").textContent = reqMsg;
   document.getElementById("rq-line").href = "https://line.me/R/oaMessage/@277rgyhl/?" + encodeURIComponent(reqMsg);
