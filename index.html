@@ -248,7 +248,7 @@ const DATA = {
     "2026-11-19": ["10:00-11:00","20:15-21:15"],
     "2026-11-26": ["15:30-16:30"]
   },
-  // Ayalee のカレンダーの予定（時間だけ。名前は入れない。SNS・台本の時間は入れない）。"終日" はその日まるごと埋まり
+  // Ayalee のカレンダーの予定（時間だけ。名前は入れない。SNS・台本の時間は入れない）。"終日" はその日まるごと埋まり。🎟️ の予定は "T:HH:MM-HH:MM"
   busy: {
     "2026-11-19": ["10:00-11:00", "20:15-21:15"],
     "2026-11-24": ["21:00-22:00"],
@@ -263,6 +263,7 @@ const DATA = {
 // 終日埋まりにする日（DATA の外。毎朝の自動更新では消えない）。2026-11-28＝押さえ、11/20 の結果で解除か確定
 const CLOSED_DAYS = ["2026-11-28"];
 const OPEN = 8*60, CLOSE = 21*60, BUFFER = 30, LESSON = 60, STEP = 30;
+const TICKET_BEFORE = 120, TICKET_TRAVEL = 60;
 // R1〜R6 は青葉台用でまだ使えない（2026-11-18）。中目黒は GP1〜GP6 だけで数える
 const TN_REFORMERS = ["GP1","GP2","GP3","GP4","GP5","GP6"];
 const toMin = s => { const [h,m] = s.split(":").map(Number); return h*60+m; };
@@ -407,9 +408,16 @@ const keyInfo = key => { const [y,m,d] = key.split("-").map(Number); const w = n
 // その日に始められる時刻の一覧
 function startsFor(store, key){
   if (CLOSED_DAYS.includes(key)) return [];
-  const busy = (DATA.busy||{})[key] || [];
-  if (busy.includes("終日")) return [];
-  const me = blocked(((DATA.me||{})[key] || []).concat(busy));
+  const busyAll = (DATA.busy||{})[key] || [];
+  if (busyAll.includes("終日")) return [];
+  // 🎟️ おでかけ予定（"T:" 付き）：開演2時間前から閉じる。終演＋移動1時間でスタジオに着く。
+  // 着くのが 18:00 まで（＝最後の 20:00 枠まで3枠以上）ならそこから開ける。間に合わなければその日の残りは閉じる（2026-11-19 Ayalee）
+  const busy = busyAll.filter(r => !r.startsWith("T:"));
+  const ticket = busyAll.filter(r => r.startsWith("T:")).map(r => {
+    const [a, b] = r.slice(2).split("-").map(toMin), arrive = b + TICKET_TRAVEL;
+    return [a - TICKET_BEFORE, arrive <= CLOSE - LESSON - 2*LESSON ? arrive : 24*60];
+  });
+  const me = blocked(((DATA.me||{})[key] || []).concat(busy)).concat(ticket);
   let ok;
   if (store === "td"){
     const blk = blocked(DATA.td[key] || []).concat(me);
