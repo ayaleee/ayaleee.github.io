@@ -293,7 +293,7 @@ const T = {
     haveNote:"新しく買う必要はありません。そのまま ② へ進んでください。", trialOnce:"体験はお一人1回だけです。2回目からは回数券がお得です。",
     firstGuide:"まず hacomono の会員登録をしてから、チケットを購入してください。", regBtn:"会員登録する",
     againP:"2回目からは回数券がお得です（10回券なら1回 ¥6,710）",
-    msg:o=>`【予約希望】\nお名前：${o.name}${o.name2?`、${o.name2}`:""}\nご利用：${o.who}\n店舗：${o.st}\n日時：${o.dt}\nメニュー：${o.menu}\nチケット：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    msg:o=>`【予約希望】${o.name||o.name2?`\nお名前：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\nご利用：${o.who}\n店舗：${o.st}\n日時：${o.dt}\nメニュー：${o.menu}\nチケット：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
     paidY:"購入済み", paidN:"これから購入", paidH:"持っている回数券",
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
@@ -331,7 +331,7 @@ const T = {
     haveNote:"No need to buy anything. Go straight to ②.", trialOnce:"The trial is once per person. From your 2nd visit, a pass is the best value.",
     firstGuide:"First sign up on hacomono, then buy the ticket.", regBtn:"Sign up",
     againP:"From your 2nd visit, passes are the best value (10-lesson pass: ¥6,710 each)",
-    msg:o=>`[Booking request]\nName: ${o.name}${o.name2?`, ${o.name2}`:""}\nVisit: ${o.who}\nStudio: ${o.st}\nDate: ${o.dt}\nMenu: ${o.menu}\nTicket: ${o.ticket}${o.paid?` (${o.paid})`:""}`,
+    msg:o=>`[Booking request]${o.name||o.name2?`\nName: ${[o.name,o.name2].filter(Boolean).join(", ")}`:""}\nVisit: ${o.who}\nStudio: ${o.st}\nDate: ${o.dt}\nMenu: ${o.menu}\nTicket: ${o.ticket}${o.paid?` (${o.paid})`:""}`,
     paidY:"bought", paidN:"buying now", paidH:"pass I have",
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
@@ -369,7 +369,7 @@ const T = {
     haveNote:"不需要再购买，直接进行 ②。", trialOnce:"体验课每人只能上 1 次。从第二次开始买次数券更划算。",
     firstGuide:"请先在 hacomono 注册会员，然后购买课程券。", regBtn:"注册会员",
     againP:"从第二次开始，次数券更划算（10次券每次 ¥6,710）",
-    msg:o=>`【预约申请／予約希望】\n姓名：${o.name}${o.name2?`、${o.name2}`:""}\n次数／ご利用：${o.who}\n店铺：${o.st}\n日期：${o.dt}\n课程：${o.menu}\n课程券：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
+    msg:o=>`【预约申请／予約希望】${o.name||o.name2?`\n姓名：${[o.name,o.name2].filter(Boolean).join("、")}`:""}\n次数／ご利用：${o.who}\n店铺：${o.st}\n日期：${o.dt}\n课程：${o.menu}\n课程券：${o.ticket}${o.paid?`（${o.paid}）`:""}`,
     paidY:"已购买（購入済み）", paidN:"马上购买（これから購入）", paidH:"已有次数券（持っている回数券）",
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
@@ -505,6 +505,7 @@ function updateReq(){
   document.getElementById("rq-buy").hidden = have;
   document.getElementById("rq-pw").hidden = have;
   document.getElementById("rq-first").hidden = !first;
+  document.getElementById("rq-n").closest("label").hidden = !first;
   document.getElementById("rq-reg").hidden = !first;
   document.getElementById("rq-guide").hidden = !first;
   const ticket = semi ? t.tSemi : first ? t.tTrial : ({"10":t.tP10,"5":t.tP5,"1":t.tP1}[k] || t.kHave);
@@ -513,8 +514,8 @@ function updateReq(){
   const {m,d,w} = keyInfo(selected);
   const dt = lang === "en" ? `${t.wd[w]} ${m}/${d}, ${fmt(s)}–${fmt(s+LESSON)}` : `${m}/${d}（${WD[w]}）${fmt(s)}〜${fmt(s+LESSON)}`;
   const st = lang === "zh" ? `${t[store]}（${T.ja[store]}）` : t[store];
-  const name = document.getElementById("rq-n").value.trim();
-  try { localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
+  const name = first ? document.getElementById("rq-n").value.trim() : "";
+  try { if (first) localStorage.setItem("name", name); localStorage.setItem("who", reqWho); } catch(e){}
   reqMsg = t.msg({ name, name2: semi ? document.getElementById("rq-n2").value.trim() : "", who: first ? t.first : t.again, st, dt,
     menu: semi ? t.mSemi : first ? t.mTrial : t.mPriv, ticket: have ? t.kHave : ticket.replace(/ ¥[\d,]+$/,""),
     paid: have ? "" : document.getElementById("rq-p").checked ? t.paidY : t.paidN });
