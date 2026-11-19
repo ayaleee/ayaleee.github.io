@@ -268,7 +268,11 @@ const TICKET_TRAVEL = 60, TICKET_MARGIN = 30, LEAD_HOURS = 24;
 const TN_REFORMERS = ["GP1","GP2","GP3","GP4","GP5","GP6"];
 const toMin = s => { const [h,m] = s.split(":").map(Number); return h*60+m; };
 const fmt = m => `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}`;
-const blocked = list => list.map(r => r.split("-").map(toMin)).map(([a,b]) => [a-BUFFER, b+BUFFER]);
+// 前後に空ける時間：ほかのインストラクターの予約・個人の予定は30分、Ayalee 自分のレッスン同士は15分（2026-11-19 Ayalee）
+const MY_BUFFER = 15;
+const blocked = (list, buf = BUFFER) => list.map(r => r.split("-").map(toMin)).map(([a,b]) => [a-buf, b+buf]);
+// 設備の予約のうち Ayalee 自分のレッスン（DATA.me と同じ時間）は15分、それ以外は30分
+const blockedMix = (list, mine) => list.flatMap(r => blocked([r], mine.includes(r) ? MY_BUFFER : BUFFER));
 const fits = (blk, s) => !blk.some(([a,b]) => a < s+LESSON && b > s);
 const STARTS = []; for (let s = OPEN; s + LESSON <= CLOSE; s += STEP) STARTS.push(s);
 
@@ -418,10 +422,12 @@ function startsFor(store, key){
     const [a, b] = range.split("-").map(toMin), from = b + travel + TICKET_MARGIN;
     return [a - travel - TICKET_MARGIN, from <= CLOSE - LESSON - 2*LESSON ? from : 24*60];
   });
-  const me = blocked(((DATA.me||{})[key] || []).concat(busy)).concat(ticket);
+  const mine = (DATA.me||{})[key] || [];
+  // カレンダーのレッスン予定は DATA.me と同じ時間で入っているので、そちらは15分で数える
+  const me = blocked(mine, MY_BUFFER).concat(blocked(busy.filter(r => !mine.includes(r)))).concat(ticket);
   let ok;
   if (store === "td"){
-    const blk = blocked(DATA.td[key] || []).concat(me);
+    const blk = blockedMix(DATA.td[key] || [], mine).concat(me);
     ok = STARTS.filter(s => fits(blk, s));
   } else {
     ok = STARTS.filter(s => fits(me, s) && tnLeft(key, s) > 0);
@@ -433,7 +439,8 @@ function startsFor(store, key){
 // 中目黒：その時刻に空いているリフォーマーの台数（＝入れる人数）
 function tnLeft(key, s){
   const map = DATA.tn[key] || {};
-  return TN_REFORMERS.filter(u => fits(blocked(map[u] || []), s)).length;
+  const mine = (DATA.me||{})[key] || [];
+  return TN_REFORMERS.filter(u => fits(blockedMix(map[u] || [], mine), s)).length;
 }
 // その日の最初の枠が24時間以内＝当日・翌日（一部が締め切り済み）。空きがなければここは「LINE でご相談ください」と出す
 function isSoon(key){ const [y,mo,da] = key.split("-").map(Number); return new Date(y, mo-1, da, 0, OPEN).getTime() - Date.now() < LEAD_HOURS*3600*1000; }
