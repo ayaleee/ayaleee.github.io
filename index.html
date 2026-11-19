@@ -275,6 +275,8 @@ const blocked = (list, buf = BUFFER) => list.map(r => r.split("-").map(toMin)).m
 const blockedMix = (list, mine) => list.flatMap(r => blocked([r], mine.includes(r) ? MY_BUFFER : BUFFER));
 const fits = (blk, s) => !blk.some(([a,b]) => a < s+LESSON && b > s);
 const STARTS = []; for (let s = OPEN; s + LESSON <= CLOSE; s += STEP) STARTS.push(s);
+// 夜は 20:15 スタート（21:15 終わり）まで受ける（2026-11-19 Ayalee）
+const LATE_START = 20*60+15; STARTS.push(LATE_START);
 
 const T = {
   ja: {
@@ -450,7 +452,7 @@ function bands(starts, key){
   for (const s of starts){
     const n = store === "tn" ? tnLeft(key, s) : 0;
     const last = out[out.length-1];
-    if (last && s - last.b === STEP && last.n === n) last.b = s; else out.push({a:s, b:s, n});
+    if (last && s - last.b <= STEP && last.n === n) last.b = s; else out.push({a:s, b:s, n});
   }
   return out;
 }
@@ -497,7 +499,7 @@ try { const w = localStorage.getItem("who"); if (w === "first" || w === "again")
 const esc = v => String(v).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function reqHTML(x){
   const t = L(), opts = [];
-  for (let s = x.a; s <= x.b; s += STEP) opts.push(`<option value="${s}">${fmt(s)}${lang==="en"?"–":"〜"}${fmt(s+LESSON)}</option>`);
+  for (const s of STARTS.filter(s => s >= x.a && s <= x.b)) opts.push(`<option value="${s}">${fmt(s)}${lang==="en"?"–":"〜"}${fmt(s+LESSON)}</option>`);
   const semi = store === "tn" && x.n >= 2;
   let nm = ""; try { nm = localStorage.getItem("name") || ""; } catch(e){}
   return `<div class="req" id="req">
