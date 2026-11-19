@@ -295,7 +295,7 @@ const T = {
     mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600・体験券なし",
     tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"はじめての方もセミプライベート券です。お連れの方も会員登録・購入をお願いします。",
     reqLine:"LINE で申し込む", reqCopy:"文をコピー",
-    st1:"① チケットを買う", st2:"② LINE で申し込む", buyNow:"チケットを買う（hacomono）",
+    st1:"① チケットを買う", st2:"② LINE で申し込む", keep:"レッスンの24時間前までにご連絡いただければ、キャンセル・日時変更でもチケットは消化されず、次回に使えます。", buyNow:"チケットを買う（hacomono）",
     pathPre:"ログインして、", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"「指名料」が付いていないものを選んでください。", newMem:"はじめての方は先に", reg:"会員登録", guide:"買い方の画像", reqCopyNote:"LINE が開かないときは、文をコピーして LINE（@277rgyhl）に送ってください。",
@@ -336,7 +336,7 @@ const T = {
     mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person (no trial)",
     tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"First-timers also use the semi-private ticket. Your partner needs to sign up and buy one too.",
     reqLine:"Request on LINE", reqCopy:"Copy message",
-    st1:"① Buy a ticket", st2:"② Request on LINE", buyNow:"Buy a ticket (hacomono)",
+    st1:"① Buy a ticket", st2:"② Request on LINE", keep:"If you let me know at least 24 hours before the lesson, you can cancel or change the date and your ticket stays for next time.", buyNow:"Buy a ticket (hacomono)",
     pathPre:"Log in, then tap: ", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"Choose the one without “指名料” (nomination fee).", newMem:"First time? Please", reg:"sign up", guide:"Picture guide", reqCopyNote:"If LINE doesn’t open, copy the message and send it to LINE (@277rgyhl) or Instagram DM.",
@@ -377,7 +377,7 @@ const T = {
     mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600・无体验券",
     tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"第一次也使用小班私教券。同行的朋友也请注册会员并购买。",
     reqLine:"通过 LINE 申请", reqCopy:"复制内容",
-    st1:"① 购买课程券", st2:"② 通过 LINE 申请", buyNow:"购买课程券（hacomono）",
+    st1:"① 购买课程券", st2:"② 通过 LINE 申请", keep:"课程开始 24 小时前联系，取消或改期都不会消耗课程券，可下次使用。", buyNow:"购买课程券（hacomono）",
     pathPre:"登录后依次点击：", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
     tTrial:"プライベートレッスン体験1回券 ¥5,000", tSemi:"セミプライベートレッスン1回券(入会金あり) ¥6,600",
     noNom:"请选择没有「指名料」（指名费）的那一个。", newMem:"第一次的话请先", reg:"注册会员", guide:"购买方法图解", reqCopyNote:"如果 LINE 打不开，请复制内容发送到 LINE（@277rgyhl）或 Instagram 私信。",
@@ -518,6 +518,7 @@ function reqHTML(x){
       <div class="rbtns"><a id="rq-line" href="#" target="_blank" rel="noopener">${t.reqLine}</a><button type="button" class="copy" id="rq-copy">${t.reqCopy}</button></div>
       <pre id="rq-msg"></pre>
       <p class="rnote" style="color:var(--muted)">${t.reqCopyNote}</p>
+      <p class="rnote">${t.keep}</p>
     </div>
   </div>`;
 }
