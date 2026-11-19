@@ -114,6 +114,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .langs button:focus-visible{outline:1px solid var(--on-photo);outline-offset:2px}
 .how .note2{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
 .how .note2:empty{display:none}
+.how .one{margin:0;font-size:14px;line-height:1.7}
 button.seg{width:100%;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);text-align:left;cursor:pointer}
 button.seg .go{font-size:15px;color:var(--muted);line-height:1}
 button.seg[aria-expanded="true"]{background:var(--wash)}
@@ -186,15 +187,10 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <div class="price"><span data-i="trial">体験レッスン 60分</span><b>¥5,000</b></div>
     <div class="price2" data-i="againP">2回目からは回数券がお得です（10回券なら1回 ¥6,710）</div>
     <div class="price2" data-i="semiP">中目黒は2名のセミプライベートもできます（1人 ¥6,600）</div>
-    <ol>
-      <li data-i="s1">LINE で「店舗・希望の日にち・開始時間」を送ってください。</li>
-      <li data-i="s2" data-html>Ayalee からお返事したら、hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。</li>
-      <li data-i="s3">「チケット買いました」と LINE をいただいたら、ご予約確定です。</li>
-    </ol>
+    <p class="one" data-i="howOne">上の空き時間をタップすると、そこから申し込めます。</p>
     <p class="note2" data-i="note2"></p>
     <div class="links">
-      <a class="primary" href="https://line.me/R/ti/p/@277rgyhl" target="_blank" rel="noopener" data-i="bookLine">LINE で予約する</a>
-      <a href="https://tou.hacomono.jp/" target="_blank" rel="noopener" data-i="buy">チケットを買う</a>
+      <a class="primary" href="https://line.me/R/ti/p/@277rgyhl" target="_blank" rel="noopener" data-i="ask">LINE で質問する</a>
       <a class="ig" href="https://ig.me/m/ayaka_leee" target="_blank" rel="noopener" data-i="ig" hidden></a>
     </div>
     <div class="lineid">LINE ID <code id="lid">@277rgyhl</code><button class="copy" id="copy" type="button" data-i="copy">コピー</button></div>
@@ -209,7 +205,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <p><b>Ayalee</b><br><span data-i="intro">舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。</span></p>
   </div>
   <div class="motto"><span class="m1">Movement for <i>loving your body</i></span></div>
-  <footer data-i="foot">毎朝更新しています。表示のあとに埋まることもあるので、LINE でお返事した時点の空きで確定します。</footer>
+  <footer data-i="foot">1日3回（7時・12時・17時ごろ）更新しています。</footer>
 </div>
 
 <script>
@@ -287,9 +283,10 @@ const T = {
     prep:"ただいま空き情報を準備中です。LINE でお問い合わせください。",
     asof:(m,d,t)=>`${m}/${d} ${t} 時点の空き（30分ごと）`,
     howH:"ご予約のしかた", trial:"体験レッスン 60分",
+    howOne:"上の空き時間をタップすると、そこから申し込めます。", ask:"LINE で質問する",
     s1:"上の空き時間をタップして、時間とメニューを選び「LINE で申し込む」を押してください。送る文は自動で入ります。",
     s2:"hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。先に買っておくと、すぐに確定できます。",
-    s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"もし埋まっていたら、別の時間をご案内します。チケットはほかの日にもそのまま使えます。", ig:"",
+    s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"", ig:"",
     semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）",
     stale:(m,d)=>`空き情報が古くなっています（${m}/${d} 時点）。表示とちがうことがあるので、LINE でお問い合わせください。`,
     alt:"第2希望（あれば）", altNone:"なし", altKey:"第2希望",
@@ -313,7 +310,7 @@ const T = {
     bookLine:"LINE で予約する", buy:"チケットを買う", copy:"コピー", copied:"コピーしました",
     mapTd:"代官山の地図", mapTn:"中目黒の地図",
     intro:"舞台俳優で、BASI ピラティスのインストラクターです。はじめての方も、体がかたい方も大丈夫。終わったあと、自分の体がちょっと好きになれる60分にしましょう。",
-    foot:"毎朝更新しています。表示のあとに埋まることもあるので、LINE でお返事した時点の空きで確定します。"
+    foot:"1日3回（7時・12時・17時ごろ）更新しています。表示のあとに埋まることもあるので、チケットの購入を確認した時点で確定します。埋まっていたら第2希望か別の時間をご案内します。"
   },
   en: {
     title:"Ayalee Pilates — Lesson availability", heroLabel:"Ayalee stretching on a Pilates barrel",
@@ -325,11 +322,12 @@ const T = {
     one:"start", range:"start any time", left:n=>`${n} ${n===1?"spot":"spots"} left`, none:"No openings on this day. Please choose another day.",
     prep:"Availability is being updated. Please ask on LINE.",
     asof:(m,d,t)=>`As of ${m}/${d} ${t} (30-min steps)`,
-    howH:"Booking in 3 steps", trial:"Trial lesson, 60 min",
+    howH:"How to book", trial:"Trial lesson, 60 min",
+    howOne:"Tap an open time above to request it right there.", ask:"Ask on LINE",
     s1:"Tap an open time above, choose the start time and menu, then press “Request on LINE”. The message is filled in for you.",
     s2:"Buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b> If you buy it first, I can confirm right away.",
     s3:"When you get “Your booking is confirmed” from me on LINE, you’re all set.",
-    note2:"If the time has just filled up, I’ll suggest another time — your ticket can be used on any day. No LINE? Copy the message and send it as an Instagram DM (@ayaka_leee). The hacomono ticket site is in Japanese — if you get stuck, just ask me.", ig:"DM on Instagram",
+    note2:"No LINE? DM me on Instagram (@ayaka_leee). The ticket site is in Japanese — just ask if you get stuck.", ig:"DM on Instagram",
     semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person)",
     stale:(m,d)=>`This availability is out of date (as of ${m}/${d}). Times may have changed — please ask on LINE.`,
     alt:"Second choice (optional)", altNone:"None", altKey:"2nd choice",
@@ -353,7 +351,7 @@ const T = {
     bookLine:"Book on LINE", buy:"Buy a ticket", copy:"Copy", copied:"Copied",
     mapTd:"Map: Daikanyama", mapTn:"Map: Nakameguro",
     intro:"I’m a stage actor and a BASI Pilates instructor. First-timers and stiff bodies are very welcome. Let’s make it 60 minutes that leave you liking your body a little more.",
-    foot:"Updated every morning. Times can fill up after the update, so your booking is based on availability when I reply on LINE."
+    foot:"Updated 3 times a day (around 7:00, 12:00 and 17:00). Times can fill up after an update; your booking is confirmed once I see your ticket. If it’s taken, I’ll offer your 2nd choice or another time."
   },
   zh: {
     title:"Ayalee 普拉提 课程空位", heroLabel:"在普拉提桶上伸展的 Ayalee",
@@ -366,10 +364,11 @@ const T = {
     prep:"空位信息更新中，请通过 LINE 咨询。",
     asof:(m,d,t)=>`${m}/${d} ${t} 的空位（每30分钟）`,
     howH:"预约方式", trial:"体验课 60分钟",
+    howOne:"点击上方的空位时间，就可以直接申请。", ask:"通过 LINE 咨询",
     s1:"点击上方的空位时间，选择开始时间和课程，然后按「通过 LINE 申请」。要发送的内容会自动填好。",
     s2:"请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>并购买课程券。先购买的话可以马上确定。",
     s3:"收到 Ayalee 发来的「预约确定」LINE 就完成了。",
-    note2:"如果刚好被约满，我会为您推荐其他时间，课程券可以用于其他日期。没有 LINE 的话，可以复制内容在 Instagram（@ayaka_leee）私信我。hacomono 购票页面是日文的，如有不明白的地方，欢迎随时问我。", ig:"Instagram 私信",
+    note2:"没有 LINE 的话，可以在 Instagram（@ayaka_leee）私信我。购票页面是日文的，有不明白的地方随时问我。", ig:"Instagram 私信",
     semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）",
     stale:(m,d)=>`空位信息已过时（${m}/${d} 时点），可能与实际不同，请通过 LINE 咨询。`,
     alt:"第二希望（可选）", altNone:"无", altKey:"第二希望／第2希望",
@@ -393,7 +392,7 @@ const T = {
     bookLine:"通过 LINE 预约", buy:"购买课程券", copy:"复制", copied:"已复制",
     mapTd:"代官山店地图", mapTn:"中目黑店地图",
     intro:"我是舞台演员，也是 BASI 普拉提教练。第一次上课、身体比较僵硬都没关系。让这60分钟结束时，你会更喜欢自己的身体一点。",
-    foot:"每天早上更新。更新后也可能被约满，以我在 LINE 回复时的空位为准。"
+    foot:"每天更新 3 次（约 7点・12点・17点）。更新后也可能被约满，确认您购买课程券后预约即确定。如已约满，会为您安排第二希望或其他时间。"
   }
 };
 let lang = "ja";
