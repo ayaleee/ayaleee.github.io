@@ -164,7 +164,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
 </section>
 <div class="wrap">
   <div class="titlebox">
-    <p data-i="lead">STUDIO TOU 代官山・中目黒／はじめての方は体験 60分 ¥5,000・English OK</p>
+    <p data-i="lead">STUDIO TOU 代官山・中目黒／Japanese・English OK</p>
     <span class="asof" id="asof"></span>
   </div>
   <div class="switch" id="days" role="group" aria-label="店舗" data-ia="storeLabel">
@@ -276,13 +276,13 @@ const T = {
   ja: {
     title:"Ayalee レッスン空き枠", heroLabel:"バレルの上で体を伸ばす Ayalee",
     h1:"レッスン空き枠", cta:"空き時間を見る",
-    lead:"STUDIO TOU 代官山・中目黒／はじめての方は体験 60分 ¥5,000・English OK",
+    lead:"STUDIO TOU 代官山・中目黒／Japanese・English OK",
     storeLabel:"店舗", dateLabel:"日付", td:"代官山", tn:"中目黒",
     wd:["日","月","火","水","木","金","土"], today:"今日", open:"空きあり", full:"満",
     day:(m,d,w,st)=>`${m}/${d}（${w}）${st}`, startsAt:"開始できる時間",
     one:"スタート", range:"の間にスタート", left:n=>`残り${n}名`, none:"この日は空きがありません。ほかの日をお選びください。",
     prep:"ただいま空き情報を準備中です。LINE でお問い合わせください。",
-    asof:(m,d,t)=>`${m}/${d} ${t} 時点の空き（30分ごと）`,
+    asof:(m,d,t)=>`最終更新 ${m}/${d} ${t}（毎日 7時・12時・17時ごろ更新）`,
     howH:"ご予約のしかた", trial:"体験レッスン 60分",
     howOne:"上の空き時間をタップすると、そこから申し込めます。", ask:"LINE で質問する",
     s1:"上の空き時間をタップして、時間とメニューを選び「LINE で申し込む」を押してください。送る文は自動で入ります。",
@@ -316,13 +316,13 @@ const T = {
   en: {
     title:"Ayalee Pilates — Lesson availability", heroLabel:"Ayalee stretching on a Pilates barrel",
     h1:"Lesson availability", cta:"See open times",
-    lead:"STUDIO TOU Daikanyama & Nakameguro / First-time trial lesson: 60 min, ¥5,000 / English OK",
+    lead:"STUDIO TOU Daikanyama & Nakameguro / Japanese & English OK",
     storeLabel:"Studio", dateLabel:"Date", td:"Daikanyama", tn:"Nakameguro",
     wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], today:"Today", open:"Open", full:"Full",
     day:(m,d,w,st)=>`${w} ${m}/${d} · ${st}`, startsAt:"Start times",
     one:"start", range:"start any time", left:n=>`${n} ${n===1?"spot":"spots"} left`, none:"No openings on this day. Please choose another day.",
     prep:"Availability is being updated. Please ask on LINE.",
-    asof:(m,d,t)=>`As of ${m}/${d} ${t} (30-min steps)`,
+    asof:(m,d,t)=>`Last updated ${m}/${d} ${t} (updated daily around 7:00, 12:00 and 17:00)`,
     howH:"How to book", trial:"Trial lesson, 60 min",
     howOne:"Tap an open time above to request it right there.", ask:"Ask on LINE",
     s1:"Tap an open time above, choose the start time and menu, then press “Request on LINE”. The message is filled in for you.",
@@ -357,13 +357,13 @@ const T = {
   zh: {
     title:"Ayalee 普拉提 课程空位", heroLabel:"在普拉提桶上伸展的 Ayalee",
     h1:"课程空位", cta:"查看可约时间",
-    lead:"STUDIO TOU 代官山・中目黑／首次体验课 60分钟 ¥5,000・可用日语、英语沟通",
+    lead:"STUDIO TOU 代官山・中目黑／可用日语、英语沟通",
     storeLabel:"店铺", dateLabel:"日期", td:"代官山", tn:"中目黑",
     wd:["日","一","二","三","四","五","六"], today:"今天", open:"有空位", full:"已满",
     day:(m,d,w,st)=>`${m}/${d}（周${w}）${st}`, startsAt:"可开始的时间",
     one:"开始", range:"之间开始", left:n=>`剩余${n}名`, none:"这一天已约满，请选择其他日期。",
     prep:"空位信息更新中，请通过 LINE 咨询。",
-    asof:(m,d,t)=>`${m}/${d} ${t} 的空位（每30分钟）`,
+    asof:(m,d,t)=>`最后更新 ${m}/${d} ${t}（每天约 7点・12点・17点更新）`,
     howH:"预约方式", trial:"体验课 60分钟",
     howOne:"点击上方的空位时间，就可以直接申请。", ask:"通过 LINE 咨询",
     s1:"点击上方的空位时间，选择开始时间和课程，然后按「通过 LINE 申请」。要发送的内容会自动填好。",
