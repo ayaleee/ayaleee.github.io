@@ -186,7 +186,7 @@ footer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid va
     <h2 data-i="howH">ご予約のしかた</h2>
     <div class="price"><span data-i="trial">体験レッスン 60分</span><b>¥5,000</b></div>
     <div class="price2" data-i="againP">2回目からは回数券がお得です（10回券なら1回 ¥6,710）</div>
-    <div class="price2" data-i="semiP">中目黒は2名のセミプライベートもできます（1人 ¥6,600）</div>
+    <div class="price2" data-i="semiP">中目黒は2名のセミプライベートもできます（1人 ¥6,600）。セミプライベートには体験券がないので、はじめての方もセミプライベート券になります</div>
     <p class="one" data-i="howOne">上の空き時間をタップすると、そこから申し込めます。</p>
     <p class="note2" data-i="note2"></p>
     <div class="links">
@@ -287,12 +287,12 @@ const T = {
     s1:"上の空き時間をタップして、時間とメニューを選び「LINE で申し込む」を押してください。送る文は自動で入ります。",
     s2:"hacomono で<b>ご希望の店舗（代官山・中目黒）を選んで</b>チケットを購入してください。先に買っておくと、すぐに確定できます。",
     s3:"Ayalee から「ご予約確定」の LINE が届いたら完了です。", note2:"", ig:"",
-    semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）",
+    semiP:"中目黒は2名のセミプライベートもできます（1人 ¥6,600）。セミプライベートには体験券がないので、はじめての方もセミプライベート券になります",
     stale:(m,d)=>`空き情報が古くなっています（${m}/${d} 時点）。表示とちがうことがあるので、LINE でお問い合わせください。`,
     alt:"第2希望（あれば）", altNone:"なし", altKey:"第2希望",
     reqH:"この時間で申し込む", reqT:"開始時間", reqM:"メニュー", reqP:"チケットはもう買いました",
-    mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600",
-    tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"お連れの方も hacomono の会員登録とチケット購入をお願いします。お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
+    mTrial:"体験レッスン（プライベート）¥5,000", mSemi:"セミプライベート（2名）1人 ¥6,600・体験券なし",
+    tkTrial:"チケットは「プライベートレッスン体験1回券」です。", tkSemi:"セミプライベートには体験券がありません。はじめての方もセミプライベート券を使います。お連れの方も hacomono の会員登録とチケット購入をお願いします。お2人とも「セミプライベートレッスン1回券」（¥6,600、入会金込み）を購入してください。",
     reqLine:"LINE で申し込む", reqCopy:"文をコピー",
     st1:"① チケットを買う", st2:"② LINE で申し込む", buyNow:"チケットを買う（hacomono）",
     pathPre:"ログインして、", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
@@ -328,12 +328,12 @@ const T = {
     s2:"Buy a ticket on hacomono. <b>Be sure to choose your studio (Daikanyama or Nakameguro).</b> If you buy it first, I can confirm right away.",
     s3:"When you get “Your booking is confirmed” from me on LINE, you’re all set.",
     note2:"No LINE? DM me on Instagram (@ayaka_leee). The ticket site is in Japanese — just ask if you get stuck.", ig:"DM on Instagram",
-    semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person)",
+    semiP:"Nakameguro also offers semi-private lessons for 2 (¥6,600 per person). There is no trial ticket for semi-private, so first-timers also use the semi-private ticket",
     stale:(m,d)=>`This availability is out of date (as of ${m}/${d}). Times may have changed — please ask on LINE.`,
     alt:"Second choice (optional)", altNone:"None", altKey:"2nd choice",
     reqH:"Request this time", reqT:"Start time", reqM:"Menu", reqP:"I’ve already bought the ticket",
-    mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person",
-    tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"Your partner also needs to sign up on hacomono and buy a ticket. Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
+    mTrial:"Trial private lesson ¥5,000", mSemi:"Semi-private for 2, ¥6,600 per person (no trial)",
+    tkTrial:"The ticket is “プライベートレッスン体験1回券” (private trial).", tkSemi:"There is no trial ticket for semi-private — first-timers also use the semi-private ticket. Your partner also needs to sign up on hacomono and buy a ticket. Each of you, please buy “セミプライベートレッスン1回券” (semi-private, ¥6,600 incl. joining fee).",
     reqLine:"Request on LINE", reqCopy:"Copy message",
     st1:"① Buy a ticket", st2:"② Request on LINE", buyNow:"Buy a ticket (hacomono)",
     pathPre:"Log in, then tap: ", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
@@ -369,12 +369,12 @@ const T = {
     s2:"请在 hacomono 上<b>选择您希望的店铺（代官山或中目黑）</b>并购买课程券。先购买的话可以马上确定。",
     s3:"收到 Ayalee 发来的「预约确定」LINE 就完成了。",
     note2:"没有 LINE 的话，可以在 Instagram（@ayaka_leee）私信我。购票页面是日文的，有不明白的地方随时问我。", ig:"Instagram 私信",
-    semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）",
+    semiP:"中目黑店也可以 2 人一起上小班私教课（每人 ¥6,600）。小班私教没有体验券，第一次上课也请购买小班私教课程券",
     stale:(m,d)=>`空位信息已过时（${m}/${d} 时点），可能与实际不同，请通过 LINE 咨询。`,
     alt:"第二希望（可选）", altNone:"无", altKey:"第二希望／第2希望",
     reqH:"申请这个时间", reqT:"开始时间", reqM:"课程", reqP:"我已经购买了课程券",
-    mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600",
-    tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"同行的朋友也需要在 hacomono 注册会员并购买课程券。请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
+    mTrial:"体验课（私教）¥5,000", mSemi:"小班私教（2人）每人 ¥6,600・无体验券",
+    tkTrial:"课程券是「プライベートレッスン体験1回券」（私教体验）。", tkSemi:"小班私教没有体验券，第一次上课也使用小班私教课程券。同行的朋友也需要在 hacomono 注册会员并购买课程券。请两位各自购买「セミプライベートレッスン1回券」（¥6,600，含入会费）。",
     reqLine:"通过 LINE 申请", reqCopy:"复制内容",
     st1:"① 购买课程券", st2:"② 通过 LINE 申请", buyNow:"购买课程券（hacomono）",
     pathPre:"登录后依次点击：", tokyo:"東京都", shopTd:"STUDIO TOU 代官山店", shopTn:"STUDIO TOU 中目黒店",
