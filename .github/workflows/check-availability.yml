@@ -1,0 +1,28 @@
+name: check-availability-fresh
+on:
+  schedule:
+    - cron: '30 13 * * *'   # 日本時間 22:30（UTC 13:30）
+  workflow_dispatch:
+    inputs:
+      max_hours:
+        description: '何時間古ければ失敗にするか（テストで 0 を入れるとわざと失敗）'
+        default: '12'
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 最終更新を読んで古さを調べる
+        env:
+          MAX_HOURS: ${{ github.event.inputs.max_hours || '12' }}
+        run: |
+          html=$(curl -fsSL https://ayaleee.github.io/)
+          asof=$(printf '%s' "$html" | grep -o 'asof: "[0-9-]* [0-9:]*"' | head -1 | grep -o '[0-9-]* [0-9:]*')
+          if [ -z "$asof" ]; then echo "::error::最終更新が見つかりません"; exit 1; fi
+          then_s=$(TZ=Asia/Tokyo date -d "$asof" +%s)
+          now_s=$(date +%s)
+          age_h=$(( (now_s - then_s) / 3600 ))
+          echo "最終更新 $asof（日本時間）／ $age_h 時間前（しきい値 ${MAX_HOURS} 時間）"
+          if [ "$age_h" -ge "$MAX_HOURS" ]; then
+            echo "::error::空き枠ページが ${age_h} 時間、更新されていません（最終更新 $asof）"
+            exit 1
+          fi
